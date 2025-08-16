@@ -24,7 +24,7 @@ export async function savePickedItem(input: {
   releaseDate?: string | null;
   userNote?: string | null;
   userLink?: string | null;
-  extra?: Record<string, any>;
+  extra?: Record<string, unknown>;
 }) {
   const userId = await requireUserId();
   const year = input.year ?? new Date().getFullYear();

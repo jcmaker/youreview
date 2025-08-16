@@ -31,7 +31,44 @@ export async function listItemsByListId(listId: string) {
     .eq("list_id", listId)
     .order("rank", { ascending: true });
   if (error) throw error;
-  return (data ?? []) as Item[];
+  type Raw = {
+    id: string;
+    list_id: string;
+    media_id: string;
+    rank: number;
+    user_note: string | null;
+    user_link: string | null;
+    created_at: string;
+    updated_at: string;
+    media?: {
+      id?: string;
+      title?: string | null;
+      image_url?: string | null;
+      creators?: string[] | null;
+      category?: "movie" | "music" | "book";
+      link_url?: string | null;
+    } | null;
+  };
+  const rows = (data ?? []) as Raw[];
+  const mapped: Item[] = rows.map((r) => ({
+    id: r.id,
+    list_id: r.list_id,
+    media_id: r.media_id,
+    rank: r.rank,
+    user_note: r.user_note,
+    user_link: r.user_link,
+    created_at: r.created_at,
+    updated_at: r.updated_at,
+    media: {
+      id: (r.media?.id ?? "") as string,
+      title: (r.media?.title ?? "") as string,
+      image_url: (r.media?.image_url ?? null) as string | null,
+      creators: (r.media?.creators ?? null) as string[] | null,
+      category: (r.media?.category ?? "movie") as "movie" | "music" | "book",
+      link_url: (r.media?.link_url ?? null) as string | null,
+    },
+  }));
+  return mapped;
 }
 
 export async function insertItemAutoRank(params: {

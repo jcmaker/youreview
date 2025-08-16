@@ -14,7 +14,7 @@ export async function GET() {
       .maybeSingle();
     if (error) throw error;
     return NextResponse.json({ username: data?.username ?? null });
-  } catch (e) {
+  } catch {
     return NextResponse.json({ username: null });
   }
 }

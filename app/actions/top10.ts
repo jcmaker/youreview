@@ -1,5 +1,4 @@
 "use server";
-export const runtime = "nodejs";
 
 import { requireUserId } from "@/lib/auth/user";
 import { revalidatePath } from "next/cache";

@@ -2,12 +2,52 @@ export const runtime = "edge";
 
 import { NextRequest } from "next/server";
 import { ImageResponse } from "next/og";
+import { supabaseAdmin } from "@/lib/supabase/serverAdmin";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const year = searchParams.get("year") ?? "";
-  const title = searchParams.get("title") ?? `youreview • ${year} Top 10`;
-  const imgs = searchParams.getAll("img").slice(0, 10);
+  const username = (searchParams.get("username") || "").toLowerCase();
+  const year = Number(searchParams.get("year") || new Date().getFullYear());
+
+  let displayTitle = `${year} Top 10`;
+  let imgs: string[] = [];
+  try {
+    if (username) {
+      const { data: profile } = await supabaseAdmin
+        .from("profiles")
+        .select("id, display_name, username")
+        .ilike("username", username)
+        .maybeSingle();
+      if (profile) {
+        displayTitle = `${
+          profile.display_name || profile.username
+        } — ${year} Top 10`;
+        const { data: lists } = await supabaseAdmin
+          .from("top10_lists")
+          .select("id")
+          .eq("user_id", profile.id)
+          .eq("year", year)
+          .eq("visibility", "public")
+          .gt("item_count", 0);
+        const listIds = (lists ?? []).map((l) => l.id);
+        if (listIds.length > 0) {
+          const { data: items } = await supabaseAdmin
+            .from("top10_items")
+            .select("media:media_id ( image_url )")
+            .in("list_id", listIds)
+            .order("rank", { ascending: true })
+            .limit(10);
+          type OgItem = { media?: { image_url?: string | null } | null };
+          imgs = ((items ?? []) as OgItem[])
+            .map((it) => it.media?.image_url ?? null)
+            .filter(Boolean)
+            .slice(0, 10) as string[];
+        }
+      }
+    }
+  } catch {
+    // ignore and fall back to default
+  }
 
   const cell = 180;
   const cols = 5;
@@ -34,14 +74,14 @@ export async function GET(req: NextRequest) {
             type: "div",
             props: {
               style: { fontSize: 44, fontWeight: 800, lineHeight: 1.2 },
-              children: title,
+              children: displayTitle,
             },
           },
           {
             type: "div",
             props: {
               style: { marginTop: 10, color: "#666", fontSize: 22 },
-              children: `${year} Recap`,
+              children: `${year} Top 10`,
             },
           },
           {

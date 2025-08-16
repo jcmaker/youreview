@@ -1,7 +1,5 @@
 "use server";
 
-export const runtime = "nodejs";
-
 import { requireUserId } from "@/lib/auth/user";
 import { supabaseAdmin } from "@/lib/supabase/serverAdmin";
 import { normalizeUsername, validateUsername } from "@/lib/profile/username";

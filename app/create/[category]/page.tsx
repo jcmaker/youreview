@@ -3,6 +3,7 @@ import { requireUserId } from "@/lib/auth/user";
 import { supabaseAdmin } from "@/lib/supabase/serverAdmin";
 import type { Category } from "@/types/media";
 import CreateEntryForm from "@/components/CreateEntryForm";
+import CreateCategoryTabs from "@/components/CreateCategoryTabs";
 
 const valid: Category[] = ["movie", "music", "book"];
 
@@ -34,10 +35,14 @@ export default async function Page({
       : "책 등록";
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-2">{title}</h1>
-      <p className="text-sm text-gray-600 mb-6">
-        검색으로 항목을 선택하고, 메모만 입력해 저장하세요. 순위는 자동 배정됩니다.
+    <div className="max-w-3xl mx-auto p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+        <h1 className="text-xl sm:text-2xl font-semibold">{title}</h1>
+        <CreateCategoryTabs />
+      </div>
+      <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6">
+        검색으로 항목을 선택하고, 메모만 입력해 저장하세요. 순위는 자동
+        배정됩니다.
       </p>
       <CreateEntryForm category={typed} />
     </div>

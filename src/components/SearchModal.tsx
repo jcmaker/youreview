@@ -18,16 +18,13 @@ export default function SearchModal({
   onPick,
 }: Props) {
   const [q, setQ] = useState("");
-  const [musicProvider, setMusicProvider] = useState<Provider>("youtube");
   const [bookProvider, setBookProvider] = useState<Provider>("naverBooks");
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const providerOverride =
     category === "music"
-      ? musicProvider === "spotify"
-        ? "spotify"
-        : undefined
+      ? "spotify" // 음악은 항상 Spotify 사용
       : category === "book"
       ? bookProvider === "googleBooks"
         ? "googleBooks"
@@ -92,34 +89,28 @@ export default function SearchModal({
 
   return (
     <div className="fixed inset-0 z-50">
+      {/* Overlay */}
       <div
-        className="absolute inset-0 bg-black/40"
+        className="absolute inset-0 bg-foreground/50"
         onClick={onClose}
         aria-hidden
       />
+      {/* Dialog */}
       <div
         role="dialog"
         aria-modal="true"
-        className="absolute inset-x-0 top-10 mx-auto w-[min(900px,92vw)] rounded-xl bg-white shadow-lg"
+        className="absolute inset-x-0 top-10 mx-auto w-[min(900px,92vw)] rounded-xl bg-card border border-border shadow-2xl"
         ref={containerRef}
       >
-        <div className="p-4 border-b flex items-center gap-3">
-          <span className="text-sm px-2 py-1 rounded bg-gray-100">
+        {/* Header */}
+        <div className="p-4 border-b border-border flex items-center gap-3">
+          <span className="text-xs sm:text-sm px-2 py-1 rounded bg-accent text-accent-foreground border border-primary">
             {category}
           </span>
-          {category === "music" && (
-            <select
-              className="border rounded px-2 py-1 text-sm"
-              value={musicProvider}
-              onChange={(e) => setMusicProvider(e.target.value as Provider)}
-            >
-              <option value="youtube">YouTube</option>
-              <option value="spotify">Spotify</option>
-            </select>
-          )}
+
           {category === "book" && (
             <select
-              className="border rounded px-2 py-1 text-sm"
+              className="border border-border rounded px-2 py-1 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               value={bookProvider}
               onChange={(e) => setBookProvider(e.target.value as Provider)}
             >
@@ -127,6 +118,7 @@ export default function SearchModal({
               <option value="googleBooks">Google</option>
             </select>
           )}
+
           <input
             ref={inputRef}
             placeholder={
@@ -136,29 +128,34 @@ export default function SearchModal({
                 ? "e.g., NewJeans"
                 : "e.g., 작별인사"
             }
-            className="flex-1 border rounded px-3 py-2 text-sm"
+            className="flex-1 border border-border rounded px-3 py-2 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
+
           <button
             onClick={onClose}
-            className="text-sm text-gray-600 px-2 py-1 hover:text-black"
+            className="text-sm text-foreground/80 px-2 py-1 hover:underline focus:outline-none focus:ring-2 focus:ring-ring rounded"
           >
             닫기
           </button>
         </div>
 
+        {/* Body */}
         <div className="p-4">
-          <div className="text-sm text-gray-600 mb-2">
+          <div className="text-sm text-muted-foreground mb-2">
             {isLoading
               ? "검색 중…"
               : isFetching
               ? "업데이트 중…"
               : "검색어를 입력하세요"}
             {isError && (
-              <span className="text-red-600 ml-2">에러: {error?.message}</span>
+              <span className="text-destructive ml-2">
+                에러: {error?.message}
+              </span>
             )}
           </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[60vh] overflow-auto">
             {data.map((item) => (
               <button
@@ -167,9 +164,9 @@ export default function SearchModal({
                   onPick(item);
                   onClose();
                 }}
-                className="text-left p-3 border rounded hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                className="text-left p-3 border border-border rounded bg-background hover:bg-accent hover:border-primary hover:shadow-md focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-150"
               >
-                <div className="w-full aspect-[16/9] bg-gray-100 rounded overflow-hidden mb-2">
+                <div className="w-full aspect-[16/9] bg-muted rounded overflow-hidden mb-2 border border-border">
                   {item.imageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -179,13 +176,15 @@ export default function SearchModal({
                     />
                   ) : null}
                 </div>
-                <div className="font-medium line-clamp-2">{item.title}</div>
+                <div className="font-medium line-clamp-2 text-foreground">
+                  {item.title}
+                </div>
                 {item.creators?.length ? (
-                  <div className="text-xs text-gray-600 mt-1 line-clamp-1">
+                  <div className="text-xs text-muted-foreground mt-1 line-clamp-1">
                     {item.creators.join(", ")}
                   </div>
                 ) : null}
-                <div className="text-[11px] text-gray-500 mt-1">
+                <div className="text-[11px] text-foreground/70 mt-1 bg-card px-2 py-1 rounded-full inline-block border border-border">
                   {item.provider}
                 </div>
               </button>

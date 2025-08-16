@@ -1,44 +1,52 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Film, Music, BookOpen } from "lucide-react";
 
-const CATS = [
-  { key: "movie", label: "영화" },
-  { key: "music", label: "음악" },
-  { key: "book", label: "책" },
+const tabs = [
+  { name: "movie", label: "영화", icon: Film },
+  { name: "music", label: "음악", icon: Music },
+  { name: "book", label: "책", icon: BookOpen },
 ] as const;
 
-export type CategoryKey = (typeof CATS)[number]["key"];
-
 export default function CategoryTabs() {
-  const sp = useSearchParams();
   const pathname = usePathname();
-  const router = useRouter();
-  const current = (sp.get("category") ?? "movie") as CategoryKey;
+  const searchParams = useSearchParams();
+  const currentCategory = searchParams.get("category") || "movie";
 
-  function setCat(nextKey: CategoryKey) {
-    const next = new URLSearchParams(sp);
-    next.set("category", nextKey);
-    const q = next.toString();
-    router.replace(q ? `${pathname}?${q}` : pathname);
-  }
+  // /top10/2025 형태에서 연도 추출
+  const yearMatch = pathname.match(/\/top10\/(\d+)/);
+  const currentYear = yearMatch
+    ? yearMatch[1]
+    : new Date().getFullYear().toString();
 
   return (
-    <div className="inline-flex rounded-lg border overflow-hidden">
-      {CATS.map((c) => (
-        <button
-          key={c.key}
-          onClick={() => setCat(c.key)}
-          className={`px-3 py-1.5 text-sm ${
-            current === c.key
-              ? "bg-black text-white"
-              : "bg-white hover:bg-gray-50"
-          }`}
-          aria-pressed={current === c.key}
-        >
-          {c.label}
-        </button>
-      ))}
+    <div className="flex gap-1 p-1 bg-card rounded-xl border border-border shadow-sm">
+      {tabs.map((tab) => {
+        const isActive = tab.name === currentCategory;
+        const href =
+          tab.name === "movie"
+            ? `/top10/${currentYear}`
+            : `/top10/${currentYear}?category=${tab.name}`;
+
+        return (
+          <Link
+            key={tab.name}
+            href={href}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring",
+              isActive
+                ? "bg-foreground text-background shadow-md border border-foreground"
+                : "text-foreground/80 border border-transparent hover:bg-accent"
+            )}
+          >
+            <tab.icon className="w-4 h-4" />
+            {tab.label}
+          </Link>
+        );
+      })}
     </div>
   );
 }

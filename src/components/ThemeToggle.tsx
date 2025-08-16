@@ -20,6 +20,7 @@ export default function ThemeToggle() {
       size="icon"
       aria-label="Toggle theme"
       onClick={toggle}
+      className="relative overflow-hidden hover:scale-105 transition-transform"
     >
       {current === "dark" ? (
         <Sun className="h-5 w-5" />
