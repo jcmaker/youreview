@@ -4,8 +4,50 @@ import { supabaseAdmin } from "@/lib/supabase/serverAdmin";
 import type { Category } from "@/types/media";
 import CreateEntryForm from "@/components/CreateEntryForm";
 import CreateCategoryTabs from "@/components/CreateCategoryTabs";
+import type { Metadata } from "next";
 
 const valid: Category[] = ["movie", "music", "book"];
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}): Promise<Metadata> {
+  const { category } = await params;
+  const typed = category as Category;
+
+  if (!valid.includes(typed)) {
+    return {
+      title: "페이지를 찾을 수 없습니다 - youreview",
+      description: "요청하신 페이지를 찾을 수 없습니다.",
+    };
+  }
+
+  const categoryNames = {
+    movie: "영화",
+    music: "음악",
+    book: "책",
+  };
+
+  const categoryName = categoryNames[typed];
+
+  return {
+    title: `${categoryName} 등록 - youreview`,
+    description: `${categoryName}를 검색하고 나만의 Top 10 리스트에 추가하세요.`,
+    keywords: [categoryName, "등록", "추가", "검색", "Top 10"],
+    openGraph: {
+      title: `${categoryName} 등록 - youreview`,
+      description: `${categoryName}를 검색하고 나만의 Top 10 리스트에 추가하세요.`,
+      type: "website",
+      locale: "ko_KR",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${categoryName} 등록 - youreview`,
+      description: `${categoryName}를 검색하고 나만의 Top 10 리스트에 추가하세요.`,
+    },
+  };
+}
 
 export default async function Page({
   params,

@@ -3,6 +3,33 @@ import { requireUserId } from "@/lib/auth/user";
 import { listEntriesByYear } from "@/lib/db/top10";
 import { buildRecap } from "@/lib/recap/compute";
 import { StatCard, ThumbGrid } from "@/components/RecapSection";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ year: string }>;
+}): Promise<Metadata> {
+  const { year } = await params;
+  const yearNum = Number(year);
+
+  return {
+    title: `${yearNum}년 연말결산 - youreview`,
+    description: `${yearNum}년 나만의 Top 10 연말결산을 확인하고 통계를 살펴보세요.`,
+    keywords: [`${yearNum}년`, "연말결산", "Top 10", "통계", "리뷰"],
+    openGraph: {
+      title: `${yearNum}년 연말결산 - youreview`,
+      description: `${yearNum}년 나만의 Top 10 연말결산을 확인하고 통계를 살펴보세요.`,
+      type: "website",
+      locale: "ko_KR",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${yearNum}년 연말결산 - youreview`,
+      description: `${yearNum}년 나만의 Top 10 연말결산을 확인하고 통계를 살펴보세요.`,
+    },
+  };
+}
 
 export default async function Page({
   params,

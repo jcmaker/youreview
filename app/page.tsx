@@ -2,6 +2,7 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import RotatingText from "@/components/RotatingText";
 import CurvedLoop from "@/components/CurvedLoop";
+import type { Metadata } from "next";
 import {
   Heart,
   Sparkles,
@@ -20,6 +21,35 @@ import {
   Palette,
   Mic,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "youreview - 한 해의 취향을 Top 10으로",
+  description:
+    "영화 · 음악 · 책을 검색하고 순위를 정해 나만의 Top 10 리스트를 만들어보세요. 연말엔 카드로 공유할 수 있습니다.",
+  keywords: [
+    "Top 10",
+    "영화",
+    "음악",
+    "책",
+    "연말결산",
+    "취향",
+    "리스트",
+    "공유",
+  ],
+  openGraph: {
+    title: "youreview - 한 해의 취향을 Top 10으로",
+    description:
+      "영화 · 음악 · 책을 검색하고 순위를 정해 나만의 Top 10 리스트를 만들어보세요.",
+    type: "website",
+    locale: "ko_KR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "youreview - 한 해의 취향을 Top 10으로",
+    description:
+      "영화 · 음악 · 책을 검색하고 순위를 정해 나만의 Top 10 리스트를 만들어보세요.",
+  },
+};
 
 export default async function Home() {
   const { userId } = await auth();

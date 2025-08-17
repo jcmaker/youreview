@@ -5,6 +5,41 @@ import Top10Board from "@/components/Top10Board";
 import CategoryTabs from "@/components/CategoryTabs";
 import YearSelector from "@/components/YearSelector";
 import VisibilityToggle from "@/components/VisibilityToggle";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ year: string }>;
+}): Promise<Metadata> {
+  const { year } = await params;
+  const yearNum = Number(year);
+
+  return {
+    title: `${yearNum}년 My Top 10 - youreview`,
+    description: `${yearNum}년 나만의 Top 10 영화, 음악, 책 리스트를 확인하고 관리하세요.`,
+    keywords: [
+      `${yearNum}년`,
+      "Top 10",
+      "영화",
+      "음악",
+      "책",
+      "리스트",
+      "대시보드",
+    ],
+    openGraph: {
+      title: `${yearNum}년 My Top 10 - youreview`,
+      description: `${yearNum}년 나만의 Top 10 영화, 음악, 책 리스트를 확인하고 관리하세요.`,
+      type: "website",
+      locale: "ko_KR",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${yearNum}년 My Top 10 - youreview`,
+      description: `${yearNum}년 나만의 Top 10 영화, 음악, 책 리스트를 확인하고 관리하세요.`,
+    },
+  };
+}
 
 export default async function Page({
   params,

@@ -296,39 +296,41 @@ export default async function Page({
 
 export async function generateMetadata({
   params,
-  searchParams,
 }: {
   params: Promise<{ username: string }>;
-  searchParams: Promise<{ year?: string }>;
 }): Promise<Metadata> {
-  const [{ username }, sp] = await Promise.all([params, searchParams]);
+  const { username } = await params;
   const uname = (username || "").toLowerCase();
-  const yearParam = sp.year;
-  const year = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear();
 
   const { data: profile } = await supabaseAdmin
     .from("profiles")
     .select("display_name, username")
     .ilike("username", uname)
     .maybeSingle();
-  const title = profile
-    ? `${profile.display_name || profile.username} — ${year} Top 10`
-    : `${year} Top 10`;
-  const description = `${year}년 공개 Top 10`; // default fallback
+
+  if (!profile) {
+    return {
+      title: "사용자를 찾을 수 없습니다 - youreview",
+      description: "요청하신 사용자를 찾을 수 없습니다.",
+    };
+  }
+
+  const displayName = profile.display_name || profile.username;
+
   return {
-    title,
-    description,
+    title: `${displayName}의 Top 10 - youreview`,
+    description: `${displayName}의 영화, 음악, 책 Top 10 리스트를 확인하세요.`,
+    keywords: [displayName, "Top 10", "영화", "음악", "책", "리스트", "프로필"],
     openGraph: {
-      images: [
-        {
-          url: `/api/og?username=${encodeURIComponent(
-            profile?.username || uname
-          )}&year=${year}`,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      title: `${displayName}의 Top 10 - youreview`,
+      description: `${displayName}의 영화, 음악, 책 Top 10 리스트를 확인하세요.`,
+      type: "profile",
+      locale: "ko_KR",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${displayName}의 Top 10 - youreview`,
+      description: `${displayName}의 영화, 음악, 책 Top 10 리스트를 확인하세요.`,
     },
   };
 }
