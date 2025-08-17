@@ -10,7 +10,7 @@ import ImagePreloader from "@/components/ImagePreloader";
 import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import ShareLinkButton from "@/components/ShareLinkButton";
+import ShareLinkButton from "../../../components/ShareLinkButton";
 
 type Item = {
   id: string;
@@ -130,6 +130,11 @@ export default async function Page({
   // 사용 가능한 카테고리들 확인
   const availableCategories = availableLists.map((l) => l.category);
 
+  // 원래 요청된 카테고리가 비공개인지 확인
+  const isRequestedCategoryPrivate = lists?.some(
+    (l) => l.category === category && l.visibility === "private"
+  );
+
   // 선택된 카테고리에 데이터가 없으면 사용 가능한 첫 번째 카테고리로 변경
   let effectiveCategory = category;
   if (
@@ -139,17 +144,15 @@ export default async function Page({
     effectiveCategory = availableCategories[0] as "movie" | "music" | "book";
   }
 
+  // 선택된 카테고리가 비공개인지 확인
+  const isCategoryPrivate = lists?.some(
+    (l) => l.category === effectiveCategory && l.visibility === "private"
+  );
+
   // 선택된 카테고리의 리스트만 필터링
   const selectedList = availableLists?.find(
     (l) => l.category === effectiveCategory
   );
-
-  // 선택된 카테고리가 비공개인지 확인 (자신의 프로필이 아닌 경우)
-  const isCategoryPrivate =
-    !isOwnProfile &&
-    lists?.some(
-      (l) => l.category === effectiveCategory && l.visibility === "private"
-    );
 
   let selectedItems: Item[] = [];
   if (selectedList) {
@@ -157,9 +160,8 @@ export default async function Page({
     selectedItems = await getCachedItems(selectedList.id);
   }
 
-  const title = `${
-    profile.display_name || profile.username
-  } — ${selectedYear} Top 10`;
+  // const title = `${profile.display_name || profile.username}'s Top 10`;
+  const title = `${profile.display_name || profile.username}`;
 
   // 공유 링크 생성
   const shareUrl = `https://youreview.me/u/${profile.username}`;
@@ -177,7 +179,12 @@ export default async function Page({
       />
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
+        <h1 className="text-2xl font-bold text-foreground">
+          {title}
+          <span className="text-foreground/90 font-semibold">
+            &apos;s Top 10
+          </span>
+        </h1>
         <div className="flex items-center gap-4">
           <YearSelector
             currentYear={selectedYear}
@@ -190,7 +197,9 @@ export default async function Page({
         </div>
       </div>
 
-      {isCategoryPrivate ? (
+      {isCategoryPrivate ||
+      isRequestedCategoryPrivate ||
+      (!isOwnProfile && !selectedList) ? (
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-accent flex items-center justify-center mb-4">
             <svg
@@ -209,18 +218,45 @@ export default async function Page({
             </svg>
           </div>
           <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
-            비공개 카테고리입니다
+            {isOwnProfile
+              ? "비공개로 설정된 카테고리입니다"
+              : "비공개 카테고리입니다"}
           </h3>
           <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-md">
-            {profile.display_name || profile.username}님이{" "}
-            {effectiveCategory === "movie"
-              ? "영화"
-              : effectiveCategory === "music"
-              ? "음악"
-              : "책"}{" "}
-            카테고리를 비공개로 설정했습니다.
+            {isOwnProfile
+              ? `현재 ${
+                  (isRequestedCategoryPrivate
+                    ? category
+                    : effectiveCategory) === "movie"
+                    ? "영화"
+                    : (isRequestedCategoryPrivate
+                        ? category
+                        : effectiveCategory) === "music"
+                    ? "음악"
+                    : "책"
+                } 카테고리가 비공개로 설정되어 있습니다.`
+              : `${profile.display_name || profile.username}님이 ${
+                  (isRequestedCategoryPrivate
+                    ? category
+                    : effectiveCategory) === "movie"
+                    ? "영화"
+                    : (isRequestedCategoryPrivate
+                        ? category
+                        : effectiveCategory) === "music"
+                    ? "음악"
+                    : "책"
+                } 카테고리를 비공개로 설정했습니다.`}
             {availableCategories.length > 0 && " 다른 카테고리를 선택해보세요."}
           </p>
+          {isOwnProfile && (
+            <div className="mb-6">
+              <Link href="/top10">
+                <Button size="lg" className="w-full sm:w-auto">
+                  대시보드에서 공개 설정 변경하기
+                </Button>
+              </Link>
+            </div>
+          )}
           {availableCategories.length > 0 && (
             <div className="text-sm text-muted-foreground">
               공개된 카테고리:{" "}

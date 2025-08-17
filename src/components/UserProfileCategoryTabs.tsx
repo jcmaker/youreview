@@ -37,7 +37,7 @@ export default function UserProfileCategoryTabs({
       const isActive = tab.name === currentCategory;
       const isAvailable =
         isOwnProfile || availableCategories.includes(tab.name);
-      const isPrivate = !isOwnProfile && !isAvailable;
+      const isPrivate = !isAvailable; // 본인 프로필에서도 비공개 상태 표시
 
       const href =
         tab.name === "movie"
@@ -68,18 +68,20 @@ export default function UserProfileCategoryTabs({
       {tabStates.map((tab) => (
         <Link
           key={tab.name}
-          href={tab.isAvailable ? tab.href : "#"}
+          href={tab.href}
           aria-current={tab.isActive ? "page" : undefined}
           title={tab.isPrivate ? `${tab.label} (비공개)` : tab.label}
           className={cn(
             "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring relative",
             tab.isActive && tab.isAvailable
               ? "bg-foreground text-background shadow-md border border-foreground"
+              : tab.isActive && tab.isPrivate
+              ? "bg-accent text-accent-foreground shadow-md border border-accent"
               : tab.isPrivate
-              ? "text-muted-foreground/50 border border-transparent cursor-not-allowed opacity-50"
+              ? "text-muted-foreground/60 border border-transparent hover:bg-accent/50"
               : "text-foreground/80 border border-transparent hover:bg-accent"
           )}
-          onClick={(e) => handleClick(e, tab.isAvailable)}
+          onClick={(e) => handleClick(e, true)} // 본인 프로필에서는 항상 클릭 가능
         >
           <tab.icon className="w-4 h-4" />
           {tab.isPrivate && (
