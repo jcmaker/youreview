@@ -6,12 +6,85 @@ import UserProfileListView from "@/components/UserProfileListView";
 import YearSelector from "@/components/YearSelector";
 import { requireUserId } from "@/lib/auth/user";
 import ScrollableGrid from "@/components/ScrollableGrid";
+import ImagePreloader from "@/components/ImagePreloader";
+import { unstable_cache } from "next/cache";
 
 type Item = {
   id: string;
   rank: number;
   media: { title: string; image_url: string | null; link_url?: string | null };
 };
+
+// 캐시된 프로필 데이터 가져오기
+const getCachedProfile = unstable_cache(
+  async (username: string) => {
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("id, display_name, username")
+      .ilike("username", username)
+      .maybeSingle();
+    return profile;
+  },
+  ["user-profile"],
+  {
+    revalidate: 300, // 5분 캐시
+    tags: ["user-profile"],
+  }
+);
+
+// 캐시된 리스트 데이터 가져오기
+const getCachedLists = unstable_cache(
+  async (userId: string, year: number) => {
+    const { data: lists } = await supabaseAdmin
+      .from("top10_lists")
+      .select("id, category, visibility, item_count")
+      .eq("user_id", userId)
+      .eq("year", year)
+      .gt("item_count", 0);
+    return lists;
+  },
+  ["user-lists"],
+  {
+    revalidate: 60, // 1분 캐시
+    tags: ["user-lists"],
+  }
+);
+
+// 캐시된 아이템 데이터 가져오기
+const getCachedItems = unstable_cache(
+  async (listId: string) => {
+    const { data: raw } = await supabaseAdmin
+      .from("top10_items")
+      .select(`id, rank, media:media_id ( title, image_url, link_url )`)
+      .eq("list_id", listId)
+      .order("rank", { ascending: true });
+
+    type RawItem = {
+      id: string;
+      rank: number;
+      media?: {
+        title?: string | null;
+        image_url?: string | null;
+        link_url?: string | null;
+      } | null;
+    };
+
+    return ((raw ?? []) as RawItem[]).map((r) => ({
+      id: r.id,
+      rank: r.rank,
+      media: {
+        title: (r.media?.title ?? "") as string,
+        image_url: (r.media?.image_url ?? null) as string | null,
+        link_url: (r.media?.link_url ?? null) as string | null,
+      },
+    }));
+  },
+  ["user-items"],
+  {
+    revalidate: 30, // 30초 캐시
+    tags: ["user-items"],
+  }
+);
 
 export default async function Page({
   params,
@@ -28,13 +101,6 @@ export default async function Page({
     ? parseInt(yearParam, 10)
     : new Date().getFullYear();
 
-  const { data: profile } = await supabaseAdmin
-    .from("profiles")
-    .select("id, display_name, username")
-    .ilike("username", uname)
-    .maybeSingle();
-  if (!profile) return notFound();
-
   // 현재 로그인한 사용자 확인
   let currentUserId: string | null = null;
   try {
@@ -43,28 +109,15 @@ export default async function Page({
     // 로그인하지 않은 경우
   }
 
+  // 캐시된 프로필 데이터 가져오기
+  const profile = await getCachedProfile(uname);
+  if (!profile) return notFound();
+
   // 자신의 프로필인지 확인
   const isOwnProfile = currentUserId === profile.id;
 
-  // 사용자의 모든 연도 데이터 가져오기
-  const { data: allLists } = await supabaseAdmin
-    .from("top10_lists")
-    .select("id, category, visibility, year")
-    .eq("user_id", profile.id)
-    .gt("item_count", 0);
-
-  // 사용 가능한 연도들 추출
-  const availableYears = [...new Set(allLists?.map((l) => l.year) || [])].sort(
-    (a, b) => b - a
-  );
-
-  // 선택된 연도의 리스트들 가져오기
-  const { data: lists } = await supabaseAdmin
-    .from("top10_lists")
-    .select("id, category, visibility")
-    .eq("user_id", profile.id)
-    .eq("year", selectedYear)
-    .gt("item_count", 0);
+  // 캐시된 리스트 데이터 가져오기
+  const lists = await getCachedLists(profile.id, selectedYear);
 
   // 자신의 프로필이면 모든 리스트, 아니면 public 리스트만
   const availableLists = isOwnProfile
@@ -97,31 +150,8 @@ export default async function Page({
 
   let selectedItems: Item[] = [];
   if (selectedList) {
-    const { data: raw } = await supabaseAdmin
-      .from("top10_items")
-      .select(`id, rank, media:media_id ( title, image_url, link_url )`)
-      .eq("list_id", selectedList.id)
-      .order("rank", { ascending: true });
-
-    type RawItem = {
-      id: string;
-      rank: number;
-      media?: {
-        title?: string | null;
-        image_url?: string | null;
-        link_url?: string | null;
-      } | null;
-    };
-
-    selectedItems = ((raw ?? []) as RawItem[]).map((r) => ({
-      id: r.id,
-      rank: r.rank,
-      media: {
-        title: (r.media?.title ?? "") as string,
-        image_url: (r.media?.image_url ?? null) as string | null,
-        link_url: (r.media?.link_url ?? null) as string | null,
-      },
-    }));
+    // 캐시된 아이템 데이터 가져오기
+    selectedItems = await getCachedItems(selectedList.id);
   }
 
   const title = `${
@@ -130,12 +160,22 @@ export default async function Page({
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
+      {/* 이미지 프리로더 */}
+      <ImagePreloader
+        images={
+          selectedItems
+            .map((item) => item.media.image_url)
+            .filter(Boolean) as string[]
+        }
+        category={effectiveCategory}
+      />
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
         <div className="flex items-center gap-4">
           <YearSelector
             currentYear={selectedYear}
-            availableYears={availableYears}
+            availableYears={[]} // 연도 선택기는 별도로 처리
           />
           <UserProfileCategoryTabs
             availableCategories={availableCategories}
@@ -236,13 +276,7 @@ export default async function Page({
               ? "음악"
               : "책"}{" "}
             Top 10이 아직 없습니다.
-            {availableYears.length > 0 && " 다른 연도를 선택해보세요."}
           </p>
-          {availableYears.length > 0 && (
-            <div className="text-sm text-muted-foreground">
-              사용 가능한 연도: {availableYears.join(", ")}년
-            </div>
-          )}
         </div>
       )}
     </div>

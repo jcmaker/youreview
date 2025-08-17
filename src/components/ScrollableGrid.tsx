@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback, memo } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ interface ScrollableGridProps {
   category: "movie" | "music" | "book";
 }
 
-export default function ScrollableGrid({
+const ScrollableGrid = memo(function ScrollableGrid({
   items,
   category,
 }: ScrollableGridProps) {
@@ -24,13 +24,20 @@ export default function ScrollableGrid({
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const checkScrollButtons = () => {
+  // 카테고리별 카드 크기를 메모이제이션
+  const cardDimensions = useMemo(() => {
+    const cardWidth = category === "music" ? 160 : 120;
+    const cardHeight = category === "music" ? 160 : 180;
+    return { cardWidth, cardHeight };
+  }, [category]);
+
+  const checkScrollButtons = useCallback(() => {
     if (!scrollContainerRef.current) return;
 
     const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
     setCanScrollLeft(scrollLeft > 0);
     setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-  };
+  }, []);
 
   useEffect(() => {
     checkScrollButtons();
@@ -44,19 +51,17 @@ export default function ScrollableGrid({
         window.removeEventListener("resize", checkScrollButtons);
       };
     }
-  }, [items]);
+  }, [checkScrollButtons, items]);
 
-  const scroll = (direction: "left" | "right") => {
+  const scroll = useCallback((direction: "left" | "right") => {
     if (!scrollContainerRef.current) return;
 
     const container = scrollContainerRef.current;
     const scrollAmount = direction === "left" ? -400 : 400;
     container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-  };
+  }, []);
 
-  // 모바일에서는 더 작은 크기로 설정
-  const cardWidth = category === "music" ? 160 : 120;
-  const cardHeight = category === "music" ? 160 : 180;
+  const { cardWidth, cardHeight } = cardDimensions;
 
   return (
     <div className="relative group">
@@ -110,6 +115,8 @@ export default function ScrollableGrid({
                     className="w-full h-full object-cover"
                     width={cardWidth}
                     height={cardHeight}
+                    // priority={item.rank <= 3} // 상위 3개는 우선 로딩
+                    sizes={`${cardWidth}px`}
                   />
                 ) : (
                   <div className="w-full h-full bg-muted flex items-center justify-center text-xs text-muted-foreground">
@@ -144,4 +151,6 @@ export default function ScrollableGrid({
       />
     </div>
   );
-}
+});
+
+export default ScrollableGrid;

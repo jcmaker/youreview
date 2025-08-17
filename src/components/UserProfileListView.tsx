@@ -1,6 +1,7 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
+import { memo, useCallback } from "react";
 
 type Item = {
   id: string;
@@ -12,12 +13,14 @@ type Props = {
   items: Item[];
 };
 
-export default function UserProfileListView({ items }: Props) {
-  const handleItemClick = (linkUrl: string | null | undefined) => {
+const UserProfileListView = memo(function UserProfileListView({
+  items,
+}: Props) {
+  const handleItemClick = useCallback((linkUrl: string | null | undefined) => {
     if (linkUrl) {
       window.open(linkUrl, "_blank");
     }
-  };
+  }, []);
 
   return (
     <div className="space-y-2">
@@ -48,4 +51,6 @@ export default function UserProfileListView({ items }: Props) {
       ))}
     </div>
   );
-}
+});
+
+export default UserProfileListView;
