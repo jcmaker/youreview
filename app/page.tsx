@@ -1,19 +1,13 @@
 import Link from "next/link";
-import { auth } from "@clerk/nextjs/server";
 import RotatingText from "@/components/RotatingText";
 import CurvedLoop from "@/components/CurvedLoop";
+import AuthAwareCTA from "@/components/AuthAwareCTA";
 import type { Metadata } from "next";
 import {
   Heart,
-  Sparkles,
   Share2,
   Clock,
   Star,
-  TrendingUp,
-  Award,
-  Film,
-  Music,
-  BookOpen,
   Search,
   BarChart3,
   PartyPopper,
@@ -52,10 +46,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Home() {
-  const { userId } = await auth();
-  const isAuthed = !!userId;
-
+export default function Home() {
   return (
     <div className="relative">
       {/* Hero Section */}
@@ -87,61 +78,7 @@ export default async function Home() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
-            {isAuthed ? (
-              <>
-                <Link
-                  href="/top10"
-                  className="px-6 py-3 rounded-lg bg-foreground text-background text-center block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <Award className="w-5 h-5" />
-                    Dashboard
-                  </div>
-                </Link>
-
-                <div className="flex flex-col sm:flex-row gap-3">
-                  {[
-                    { href: "/create/movie", label: "영화 추가", icon: Film },
-                    { href: "/create/music", label: "음악 추가", icon: Music },
-                    { href: "/create/book", label: "책 추가", icon: BookOpen },
-                  ].map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="px-5 py-3 rounded-lg border border-muted-foreground hover:bg-card hover:text-background text-center block transition-all duration-200 shadow-sm hover:shadow-md text-foreground"
-                    >
-                      <div className="flex items-center justify-center gap-2">
-                        <item.icon className="w-5 h-5" />
-                        {item.label}
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/sign-in"
-                  className="px-6 py-3 rounded-lg bg-foreground text-background text-center font-bold block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <Sparkles className="w-5 h-5" />
-                    시작하기 (로그인)
-                  </div>
-                </Link>
-                <a
-                  href="#how"
-                  className="px-5 py-3 rounded-lg border border-border hover:bg-accent text-center block transition-all duration-200 shadow-sm hover:shadow-md text-foreground"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <TrendingUp className="w-5 h-5" />
-                    어떻게 동작하나요?
-                  </div>
-                </a>
-              </>
-            )}
-          </div>
+          <AuthAwareCTA />
         </div>
       </section>
 
@@ -222,7 +159,7 @@ export default async function Home() {
               desc: "한 해의 취향 기록을 한곳에 모아두세요.",
             },
             {
-              icon: Sparkles,
+              icon: Clock,
               title: "취향 발견",
               desc: "연말에 보면 나만의 패턴이 보여요.",
             },
@@ -310,22 +247,69 @@ export default async function Home() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              {[
-                { href: "/create/movie", label: "영화 추가", icon: Film },
-                { href: "/create/music", label: "음악 추가", icon: Music },
-                { href: "/create/book", label: "책 추가", icon: BookOpen },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="px-4 py-3 rounded-lg bg-foreground text-background text-center text-sm block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <item.icon className="w-4 h-4" />
-                    {item.label}
-                  </div>
-                </Link>
-              ))}
+              <Link
+                href="/create/movie"
+                className="px-4 py-3 rounded-lg bg-foreground text-background text-center text-sm block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 4v16M17 4v16M3 8h4m10 0h4M6 4h12M4 16h16M4 12h16"
+                    />
+                  </svg>
+                  영화 추가
+                </div>
+              </Link>
+              <Link
+                href="/create/music"
+                className="px-4 py-3 rounded-lg bg-foreground text-background text-center text-sm block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+                    />
+                  </svg>
+                  음악 추가
+                </div>
+              </Link>
+              <Link
+                href="/create/book"
+                className="px-4 py-3 rounded-lg bg-foreground text-background text-center text-sm block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                  책 추가
+                </div>
+              </Link>
             </div>
           </div>
         </div>
