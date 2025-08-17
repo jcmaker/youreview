@@ -5,7 +5,7 @@ import UserProfileCategoryTabs from "@/components/UserProfileCategoryTabs";
 import UserProfileListView from "@/components/UserProfileListView";
 import YearSelector from "@/components/YearSelector";
 import { requireUserId } from "@/lib/auth/user";
-import Image from "next/image";
+import ScrollableGrid from "@/components/ScrollableGrid";
 
 type Item = {
   id: string;
@@ -197,52 +197,7 @@ export default async function Page({
           </div>
 
           {/* Grid View - Horizontal scrolling cards with images */}
-          <div className="overflow-x-auto">
-            <div className="flex gap-4 pb-4 min-w-max">
-              {selectedItems.map((it) => (
-                <div
-                  key={it.id}
-                  className="relative rounded-lg overflow-hidden border border-border bg-card shadow-sm hover:shadow-md transition-shadow flex-shrink-0"
-                  style={{
-                    width: effectiveCategory === "music" ? "200px" : "150px",
-                  }}
-                >
-                  <div
-                    className={`w-full overflow-hidden bg-muted ${
-                      effectiveCategory === "music"
-                        ? "aspect-square"
-                        : "aspect-[2/3]"
-                    }`}
-                  >
-                    {it.media.image_url ? (
-                      <Image
-                        src={it.media.image_url}
-                        alt={it.media.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover"
-                        width={effectiveCategory === "music" ? 200 : 150}
-                        height={effectiveCategory === "music" ? 200 : 225}
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-muted flex items-center justify-center text-xs text-muted-foreground">
-                        no image
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="absolute top-2 left-2 text-xs font-semibold bg-foreground/80 text-background px-1.5 py-0.5 rounded">
-                    #{it.rank}
-                  </div>
-
-                  <div className="p-3">
-                    <div className="text-sm font-medium line-clamp-2 text-foreground">
-                      {it.media.title}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <ScrollableGrid items={selectedItems} category={effectiveCategory} />
 
           {/* List View - Ranked list with clickable links */}
           <div className="mt-8">

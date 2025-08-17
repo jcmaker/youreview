@@ -108,7 +108,7 @@ export default async function Home() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="px-5 py-3 rounded-lg border border-border hover:bg-accent text-center block transition-all duration-200 shadow-sm hover:shadow-md text-foreground"
+                      className="px-5 py-3 rounded-lg border border-muted-foreground hover:bg-card hover:text-background text-center block transition-all duration-200 shadow-sm hover:shadow-md text-foreground"
                     >
                       <div className="flex items-center justify-center gap-2">
                         <item.icon className="w-5 h-5" />

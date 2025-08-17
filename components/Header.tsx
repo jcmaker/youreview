@@ -49,7 +49,7 @@ export default function Header() {
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-40 border-b border-foreground bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-xs">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <div>
@@ -72,7 +72,7 @@ export default function Header() {
               <div key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-sm font-medium text-foreground/80 transition-colors flex items-center gap-2 px-3 py-2 rounded-lg border border-transparent hover:bg-accent hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="text-sm font-medium text-foreground/80 transition-colors flex items-center gap-2 px-3 py-2 rounded-lg border border-transparent hover:bg-popover hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                 >
                   <item.icon className="w-4 h-4" />
                   {item.label}

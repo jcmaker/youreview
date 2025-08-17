@@ -22,7 +22,8 @@ import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { fetchJson } from "@/lib/http/fetchJson";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, GripVertical } from "lucide-react";
+import { Button } from "./ui/button";
 
 type BoardEntry = {
   id: string;
@@ -70,6 +71,20 @@ function SortableCard({
     },
   });
 
+  // 모바일에서만 드래그 핸들 사용
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -80,69 +95,95 @@ function SortableCard({
       ref={setNodeRef}
       style={style}
       {...(disabled ? {} : attributes)}
-      {...(disabled ? {} : listeners)}
+      {...(disabled || isMobile ? {} : listeners)}
       aria-disabled={disabled}
-      className={`group border-2 rounded-xl p-4 bg-card shadow-md hover:shadow-lg flex items-center gap-3 sm:gap-4 ${
+      className={`group border-2 rounded-xl md:p-2 p-1 pl-0 bg-card shadow-md hover:shadow-lg flex items-center justify-between gap-2 sm:gap-3 lg:gap-4 ${
         disabled
           ? "opacity-60 cursor-default"
+          : isMobile
+          ? "cursor-default"
           : "cursor-grab active:cursor-grabbing"
       } ${
         isDragging
-          ? "shadow-2xl scale-[1.02] z-10 border-primary rotate-1"
+          ? "shadow-2xl scale-[1.02] z-10 border-primary rotate-1 bg-accent/20"
           : "border-border"
       } transition-all duration-300 ease-out`}
     >
-      {/* Rank badge */}
-      <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-full bg-foreground flex items-center justify-center font-bold text-sm sm:text-base text-background border border-border">
+      {/* Rank badge - 모바일에서는 간단한 텍스트, PC에서는 원형 */}
+      <div className="hidden sm:flex w-10 lg:w-12 h-10 lg:h-12 rounded-full bg-foreground items-center justify-center font-bold text-sm lg:text-base text-background border border-border">
         #{displayRank}
       </div>
-
-      {/* Thumbnail */}
-      <div className="w-16 sm:w-20 aspect-video rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0 border border-border shadow-sm bg-muted">
-        {entry.media.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={entry.media.imageUrl}
-            alt={entry.media.title}
-            loading="lazy"
-            className="object-cover w-full h-full"
-          />
-        ) : (
-          <span className="text-xs text-muted-foreground">no image</span>
-        )}
-      </div>
-
-      {/* Texts */}
-      <div className="flex-1 min-w-0">
-        <div className="font-semibold truncate text-sm sm:text-base text-foreground">
-          {entry.media.title}
+      {/* Drag Handle - 모바일에서만 표시 */}
+      {allowDrag && (
+        <div
+          className="sm:hidden flex items-center justify-center p-1 text-muted-foreground cursor-grab active:cursor-grabbing hover:text-foreground transition-colors"
+          {...(isMobile ? listeners : {})}
+        >
+          <GripVertical className="w-4 h-4" />
         </div>
-        {entry.media.creators?.length ? (
-          <div className="text-xs sm:text-sm text-muted-foreground truncate">
-            {entry.media.creators.join(", ")}
+      )}
+
+      <div className="flex items-center gap-2 flex-1">
+        {/* Thumbnail - 모바일에서는 숨김 */}
+        <div className="hidden sm:block w-16 lg:w-20 aspect-video rounded-lg overflow-hidden md:flex items-center justify-center flex-shrink-0 border border-border shadow-sm bg-muted">
+          {entry.media.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={entry.media.imageUrl}
+              alt={entry.media.title}
+              loading="lazy"
+              className="object-cover w-full h-full"
+            />
+          ) : (
+            <span className="text-xs text-muted-foreground">no image</span>
+          )}
+        </div>
+
+        {/* Texts */}
+        <div className="flex-1 min-w-0 max-w-[200px] sm:max-w-[250px] lg:max-w-[300px]">
+          <div className="font-semibold truncate text-sm sm:text-sm lg:text-base text-foreground">
+            {entry.media.title}
           </div>
-        ) : null}
+          {entry.media.creators?.length ? (
+            <div className="text-xs text-muted-foreground truncate">
+              {entry.media.creators.join(", ")}
+            </div>
+          ) : null}
+        </div>
       </div>
 
       {/* Actions */}
       {allowEdit && (
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 flex-shrink-0">
-          <button
+        <div className=" md:group-hover:opacity-100 transition-opacity flex items-center gap-1 sm:gap-2 flex-shrink-0 md:opacity-0">
+          {/* PC에서는 개별 버튼 */}
+          <div className="md:flex gap-2">
+            <button
+              type="button"
+              onClick={() => onEdit(entry)}
+              className="p-2 rounded-lg bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors duration-200 shadow-sm"
+              title="편집"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
+            {/* <button
+              type="button"
+              onClick={() => onDelete(entry)}
+              className="p-2 rounded-lg border border-foreground hover:bg-accent text-foreground transition-colors duration-200 shadow-sm"
+              title="삭제"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button> */}
+          </div>
+
+          {/* 모바일에서는 편집 버튼만 표시 */}
+          {/* <Button
             type="button"
             onClick={() => onEdit(entry)}
-            className="p-2 rounded-lg bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors duration-200 shadow-sm"
+            className="md:hidden p-1.5 rounded-lg bg-foreground/5 hover:bg-foreground/10 text-foreground "
             title="편집"
           >
-            <Edit className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(entry)}
-            className="p-2 rounded-lg border border-border hover:bg-accent text-foreground transition-colors duration-200 shadow-sm"
-            title="삭제"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+            <Edit className="w-3.5 h-3.5" />
+          </Button> */}
         </div>
       )}
     </div>
@@ -156,12 +197,24 @@ function DragOverlayCard({
   entry: BoardEntry;
   displayRank: number;
 }) {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+
   return (
-    <div className="border-2 rounded-xl p-4 bg-card shadow-2xl flex items-center gap-3 sm:gap-4 border-primary scale-[1.02] rotate-1">
-      <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-full bg-accent flex items-center justify-center font-bold text-sm sm:text-base text-accent-foreground border border-border">
+    <div
+      className={`border-2 rounded-xl p-2 sm:p-3 lg:p-4 bg-card shadow-2xl flex items-center gap-2 sm:gap-3 lg:gap-4 border-primary ${
+        isMobile ? "scale-[1.05] rotate-2" : "scale-[1.02] rotate-1"
+      }`}
+    >
+      {/* Rank badge - 모바일에서는 간단한 텍스트, PC에서는 원형 */}
+      <div className="hidden sm:flex w-10 lg:w-12 h-10 lg:h-12 rounded-full bg-accent items-center justify-center font-bold text-sm lg:text-base text-accent-foreground border border-border">
         #{displayRank}
       </div>
-      <div className="w-16 sm:w-20 aspect-video rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0 border border-border shadow-sm bg-muted">
+      <div className="sm:hidden text-xs font-bold text-accent-foreground bg-accent px-2 py-1 rounded">
+        #{displayRank}
+      </div>
+
+      {/* Thumbnail - 모바일에서는 숨김 */}
+      <div className="hidden sm:block w-16 lg:w-20 aspect-video rounded-lg overflow-hidden md:flex items-center justify-center flex-shrink-0 border border-border shadow-sm bg-muted">
         {entry.media.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -173,12 +226,12 @@ function DragOverlayCard({
           <span className="text-xs text-muted-foreground">no image</span>
         )}
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="font-semibold truncate text-sm sm:text-base text-foreground">
+      <div className="flex-1 min-w-0 max-w-[200px] sm:max-w-[250px] lg:max-w-[300px]">
+        <div className="font-semibold truncate text-sm sm:text-sm lg:text-base text-foreground">
           {entry.media.title}
         </div>
         {entry.media.creators?.length ? (
-          <div className="text-xs sm:text-sm text-muted-foreground truncate">
+          <div className="text-xs text-muted-foreground truncate">
             {entry.media.creators.join(", ")}
           </div>
         ) : null}
@@ -223,13 +276,13 @@ export default function Top10Board({
     setMounted(true);
   }, []);
 
-  // 센서 설정
+  // 센서 설정 - 모바일 드래그 개선
   const pointer = useSensor(PointerSensor, {
     activationConstraint: { distance: 8 },
   });
   const touch = useSensor(TouchSensor, {
-    pressDelay: 100,
-    activationConstraint: { distance: 8, tolerance: 5 },
+    pressDelay: 50, // 더 빠른 반응
+    activationConstraint: { distance: 5, tolerance: 10 }, // 더 관대한 제약
   });
   const sensors = useSensors(pointer, touch);
 
@@ -240,7 +293,7 @@ export default function Top10Board({
   const [editing, setEditing] = useState<BoardEntry | null>(null);
   const [deleting, setDeleting] = useState<BoardEntry | null>(null);
   const [editNote, setEditNote] = useState<string>("");
-  const [editLink, setEditLink] = useState<string>("");
+  // const [editLink, setEditLink] = useState<string>("");
   const [toast, setToast] = useState<string>("");
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
@@ -260,12 +313,25 @@ export default function Top10Board({
 
   function handleDragStart(event: DragStartEvent) {
     setActiveId(event.active.id);
+
+    // 모바일에서 드래그 시작 시 페이지 스크롤 방지
+    if (typeof window !== "undefined" && window.innerWidth < 640) {
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
     if (!allowDrag) return;
     const { active, over } = event;
     setActiveId(null);
+
+    // 모바일에서 드래그 종료 시 페이지 스크롤 복원
+    if (typeof window !== "undefined" && window.innerWidth < 640) {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    }
+
     if (!over || active.id === over.id) return;
 
     const oldIndex = ids.indexOf(active.id);
@@ -301,7 +367,7 @@ export default function Top10Board({
     if (!allowEdit) return;
     setEditing(entry);
     setEditNote(entry.userNote ?? "");
-    setEditLink(entry.userLink ?? "");
+    // setEditLink(entry.userLink ?? "");
     setToast("");
   }
 
@@ -319,7 +385,7 @@ export default function Top10Board({
         await updateItem({
           itemId: editing.id,
           userNote: editNote.trim() || null,
-          userLink: editLink.trim() || null,
+          userLink: editing.userLink, // 기존 링크 유지
         });
         setToast("저장되었습니다");
         setEditing(null);
@@ -375,10 +441,16 @@ export default function Top10Board({
 
         <DragOverlay>
           {activeEntry ? (
-            <DragOverlayCard
-              entry={activeEntry}
-              displayRank={activeEntry.rank}
-            />
+            <>
+              {/* 모바일에서 드래그 중일 때 전체 화면 오버레이 */}
+              {typeof window !== "undefined" && window.innerWidth < 640 && (
+                <div className="fixed inset-0 bg-background/50 backdrop-blur-sm z-40 pointer-events-none" />
+              )}
+              <DragOverlayCard
+                entry={activeEntry}
+                displayRank={activeEntry.rank}
+              />
+            </>
           ) : null}
         </DragOverlay>
       </DndContext>
@@ -404,13 +476,13 @@ export default function Top10Board({
 
       {/* Edit Modal */}
       {editing && allowEdit && (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-foreground/50 backdrop-blur-sm"
             onClick={() => setEditing(null)}
             aria-hidden
           />
-          <div className="absolute inset-x-4 sm:inset-x-0 top-20 mx-auto w-full sm:w-[min(520px,92vw)] rounded-2xl bg-card border border-border shadow-2xl p-6">
+          <div className="relative w-full sm:w-[min(520px,92vw)] max-h-[90vh] overflow-y-auto rounded-2xl bg-card border border-border shadow-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
                 <Edit className="w-4 h-4 text-accent-foreground" />
@@ -430,7 +502,8 @@ export default function Top10Board({
                   placeholder="간단한 감상이나 메모를 남겨보세요..."
                 />
               </div>
-              <div>
+              {/* 링크 입력 필드 숨김 */}
+              {/* <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
                   링크
                 </label>
@@ -440,24 +513,38 @@ export default function Top10Board({
                   onChange={(e) => setEditLink(e.target.value)}
                   placeholder="https://..."
                 />
-              </div>
+              </div> */}
             </div>
 
-            <div className="flex justify-end gap-3 mt-6">
+            <div className="flex justify-between items-center mt-6">
+              {/* 삭제 버튼 - PC와 모바일 모두 표시 */}
               <button
                 type="button"
-                onClick={() => setEditing(null)}
-                className="px-4 py-2 text-sm rounded-lg border border-border hover:bg-accent transition-colors text-foreground"
+                onClick={() => {
+                  setEditing(null);
+                  openDelete(editing);
+                }}
+                className="px-4 py-2 text-sm rounded-lg border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors"
               >
-                취소
+                삭제
               </button>
-              <button
-                type="button"
-                onClick={onConfirmEdit}
-                className="px-4 py-2 text-sm rounded-lg bg-foreground text-background transition-all duration-200 shadow-lg hover:opacity-90"
-              >
-                저장
-              </button>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setEditing(null)}
+                  className="px-4 py-2 text-sm rounded-lg border border-border hover:bg-accent transition-colors text-foreground"
+                >
+                  취소
+                </button>
+                <button
+                  type="button"
+                  onClick={onConfirmEdit}
+                  className="px-4 py-2 text-sm rounded-lg bg-foreground text-background transition-all duration-200 shadow-lg hover:opacity-90"
+                >
+                  저장
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -465,13 +552,13 @@ export default function Top10Board({
 
       {/* Delete Modal */}
       {deleting && allowEdit && (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-foreground/50 backdrop-blur-sm"
             onClick={() => setDeleting(null)}
             aria-hidden
           />
-          <div className="absolute inset-x-4 sm:inset-x-0 top-28 mx-auto w-full sm:w-[min(420px,92vw)] rounded-2xl bg-card border border-border shadow-2xl p-6">
+          <div className="relative w-full sm:w-[min(420px,92vw)] rounded-2xl bg-card border border-border shadow-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center">
                 <Trash2 className="w-4 h-4 text-foreground" />
