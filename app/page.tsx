@@ -151,7 +151,7 @@ export default async function Home() {
           <CurvedLoop
             marqueeText="La La Land ✦ Inception ✦ Parasite ✦ NewJeans ✦ BTS ✦ Harry Potter ✦ F1 ✦ Blackpink ✦"
             speed={1.5}
-            size="medium"
+            // size="medium"
             interactive={true}
             curveAmount={150}
             className="font-bold text-foreground"

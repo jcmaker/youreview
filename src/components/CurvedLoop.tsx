@@ -17,7 +17,6 @@ interface CurvedLoopProps {
   curveAmount?: number;
   direction?: "left" | "right";
   interactive?: boolean;
-  size?: "small" | "medium" | "large";
 }
 
 const CurvedLoop: FC<CurvedLoopProps> = ({
@@ -27,7 +26,6 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
   curveAmount = 400,
   direction = "left",
   interactive = true,
-  size = "medium",
 }) => {
   const text = useMemo(() => {
     const hasTrailing = /\s|\u00A0$/.test(marqueeText);
@@ -57,27 +55,6 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
         .join("")
     : text;
   const ready = spacing > 0;
-
-  // 크기별 설정
-  const sizeConfig = {
-    small: {
-      fontSize: "text-3xl sm:text-3xl",
-      height: "h-16 sm:h-20",
-      viewBox: "0 0 1440 80",
-    },
-    medium: {
-      fontSize: "text-4xl sm:text-4xl md:text-5xl",
-      height: "h-20 sm:h-24 md:h-28",
-      viewBox: "0 0 1440 120",
-    },
-    large: {
-      fontSize: "text-5xl sm:text-5xl md:text-6xl",
-      height: "h-24 sm:h-28 md:h-32",
-      viewBox: "0 0 1440 160",
-    },
-  };
-
-  const config = sizeConfig[size];
 
   useEffect(() => {
     if (measureRef.current)
@@ -153,7 +130,7 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
 
   return (
     <div
-      className={`w-full ${config.height} flex items-center justify-center`}
+      className="flex items-center justify-center w-full"
       style={{ visibility: ready ? "visible" : "hidden", cursor: cursorStyle }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
@@ -161,8 +138,10 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
       onPointerLeave={endDrag}
     >
       <svg
-        className={`select-none w-full overflow-visible block aspect-[100/12] ${config.fontSize} font-bold uppercase leading-none`}
-        viewBox={config.viewBox}
+        className={`select-none w-full overflow-visible block aspect-[100/12] text-[6rem] font-bold uppercase leading-none ${
+          className ?? ""
+        }`}
+        viewBox="0 0 1440 120"
       >
         <text
           ref={measureRef}
@@ -183,7 +162,7 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
         {ready && (
           <text
             xmlSpace="preserve"
-            className={`fill-gray-800 dark:fill-gray-100 ${className ?? ""}`}
+            className="fill-gray-800 dark:fill-gray-100"
           >
             <textPath
               ref={textPathRef}

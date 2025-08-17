@@ -23,7 +23,6 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { fetchJson } from "@/lib/http/fetchJson";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Edit, Trash2, GripVertical } from "lucide-react";
-import { Button } from "./ui/button";
 
 type BoardEntry = {
   id: string;
@@ -44,14 +43,14 @@ function SortableCard({
   allowDrag,
   allowEdit,
   onEdit,
-  onDelete,
-}: {
+}: // onDelete,
+{
   entry: BoardEntry;
   displayRank: number;
   allowDrag: boolean;
   allowEdit: boolean;
   onEdit: (entry: BoardEntry) => void;
-  onDelete: (entry: BoardEntry) => void;
+  // onDelete: (entry: BoardEntry) => void;
 }) {
   const id = entry.id;
   const disabled = !allowDrag;
@@ -433,7 +432,7 @@ export default function Top10Board({
                 allowDrag={allowDrag}
                 allowEdit={allowEdit}
                 onEdit={openEdit}
-                onDelete={openDelete}
+                // onDelete={openDelete}
               />
             ))}
           </div>
