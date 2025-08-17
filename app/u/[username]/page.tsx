@@ -8,6 +8,9 @@ import { requireUserId } from "@/lib/auth/user";
 import ScrollableGrid from "@/components/ScrollableGrid";
 import ImagePreloader from "@/components/ImagePreloader";
 import { unstable_cache } from "next/cache";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import ShareLinkButton from "@/components/ShareLinkButton";
 
 type Item = {
   id: string;
@@ -158,6 +161,9 @@ export default async function Page({
     profile.display_name || profile.username
   } — ${selectedYear} Top 10`;
 
+  // 공유 링크 생성
+  const shareUrl = `https://youreview.me/u/${profile.username}`;
+
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* 이미지 프리로더 */}
@@ -277,6 +283,46 @@ export default async function Page({
               : "책"}{" "}
             Top 10이 아직 없습니다.
           </p>
+        </div>
+      )}
+
+      {/* 자신의 프로필일 경우 공유 링크 섹션 */}
+      {isOwnProfile && (
+        <div className="flex flex-col items-center justify-center py-8 px-4 text-center border-t">
+          <div className="max-w-md">
+            <h3 className="text-lg font-semibold text-foreground mb-3">
+              프로필 공유하기
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              다른 사람들과 당신의 Top 10 리스트를 공유해보세요.
+            </p>
+            <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+              <span className="text-sm text-muted-foreground flex-1 break-all">
+                {shareUrl}
+              </span>
+              <ShareLinkButton url={shareUrl} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 나만의 top 리스트 공유해보기 버튼 - 자신의 프로필이 아닌 경우에만 표시 */}
+      {!isOwnProfile && (
+        <div className="flex flex-col items-center justify-center py-8 px-4 text-center border-t">
+          <div className="max-w-md">
+            <h3 className="text-lg font-semibold text-foreground mb-3">
+              나만의 Top 10 리스트를 만들어보세요
+            </h3>
+            <p className="text-sm text-muted-foreground mb-6">
+              좋아하는 영화, 음악, 책으로 나만의 Top 10 리스트를 만들고 다른
+              사람들과 공유해보세요.
+            </p>
+            <Link href="/">
+              <Button size="lg" className="w-full sm:w-auto">
+                나만의 Top 10 리스트 만들기
+              </Button>
+            </Link>
+          </div>
         </div>
       )}
     </div>

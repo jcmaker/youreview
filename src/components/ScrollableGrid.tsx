@@ -111,11 +111,11 @@ const ScrollableGrid = memo(function ScrollableGrid({
                   <Image
                     src={item.media.image_url}
                     alt={item.media.title}
-                    loading="lazy"
+                    // loading="lazy"
                     className="w-full h-full object-cover"
                     width={cardWidth}
                     height={cardHeight}
-                    // priority={item.rank <= 3} // 상위 3개는 우선 로딩
+                    priority={item.rank <= 3} // 상위 3개는 우선 로딩
                     sizes={`${cardWidth}px`}
                   />
                 ) : (

@@ -16,6 +16,9 @@ import {
   Music,
   BookOpen,
 } from "lucide-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 type Props = {
   category: Category;
@@ -103,9 +106,9 @@ export default function CreateEntryForm({ category }: Props) {
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-muted-foreground" />
           </div>
-          <input
+          <Input
             type="text"
-            className="w-full border border-foreground rounded-xl pl-10 pr-4 py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+            className="w-full border border-foreground rounded-xl pl-10 pr-4 py-3 text-sm sm:text-base focus:outline-black focus:ring-2 focus:ring-ring bg-background text-foreground"
             placeholder={
               category === "movie"
                 ? "영화 제목을 입력하세요 (예: 라라랜드)"
@@ -272,7 +275,7 @@ export default function CreateEntryForm({ category }: Props) {
             설명/리뷰{" "}
             <span className="text-muted-foreground font-normal">(선택)</span>
           </label>
-          <textarea
+          <Textarea
             className="w-full border border-foreground rounded-xl px-4 py-3 min-h-[100px] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
             value={userNote}
             onChange={(e) => setUserNote(e.target.value)}
@@ -307,10 +310,10 @@ export default function CreateEntryForm({ category }: Props) {
           </div>
         )}
 
-        <button
+        <Button
           type="submit"
           disabled={isPending}
-          className="w-full sm:w-auto px-6 py-3 rounded-xl bg-foreground text-background disabled:opacity-50 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-200 shadow-lg hover:opacity-90 transform hover:-translate-y-0.5 disabled:transform-none"
+          className="w-full sm:w-auto px-6 py-3 rounded-xl bg-foreground text-background disabled:opacity-50 font-bold text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-200 shadow-lg hover:opacity-90 transform hover:-translate-y-0.5 disabled:transform-none"
         >
           <div className="flex items-center justify-center gap-2">
             {isPending ? (
@@ -320,7 +323,7 @@ export default function CreateEntryForm({ category }: Props) {
             )}
             {isPending ? "저장 중…" : "저장"}
           </div>
-        </button>
+        </Button>
       </form>
     </div>
   );
