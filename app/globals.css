@@ -219,3 +219,11 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-track {
+  background: initial;
+  width: initial;
+  height: initial;
+}
