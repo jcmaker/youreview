@@ -1,5 +1,3 @@
-"use client";
-
 import { SignUp } from "@clerk/nextjs";
 import type { Metadata } from "next";
 
