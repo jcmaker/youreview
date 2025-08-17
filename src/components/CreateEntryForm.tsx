@@ -149,26 +149,26 @@ export default function CreateEntryForm({ category }: Props) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-h-[400px] sm:max-h-[600px] overflow-auto">
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 lg:gap-4 max-h-[400px] sm:max-h-[600px] overflow-auto">
             {isSearching
-              ? Array.from({ length: 6 }).map((_, idx) => (
+              ? Array.from({ length: 12 }).map((_, idx) => (
                   <div
                     key={idx}
-                    className="p-3 sm:p-4 border border-border rounded-xl bg-card shadow-sm"
+                    className="p-2 sm:p-3 border border-border rounded-lg bg-card shadow-sm"
                   >
-                    <Skeleton className="w-full aspect-[2/3] mb-3 rounded-lg" />
-                    <Skeleton className="h-4 w-3/4 mb-2" />
-                    <Skeleton className="h-3 w-1/2" />
+                    <Skeleton className="w-full aspect-[2/3] mb-2 rounded-md" />
+                    <Skeleton className="h-3 w-3/4 mb-1" />
+                    <Skeleton className="h-2 w-1/2" />
                   </div>
                 ))
               : searchResults.map((item) => (
                   <button
                     key={`${item.provider}:${item.providerId}`}
                     onClick={() => onPick(item)}
-                    className="text-left p-3 sm:p-4 border border-border rounded-xl bg-background hover:bg-accent hover:border-primary hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-200 group"
+                    className="text-left p-2 sm:p-3 border border-border rounded-lg bg-background hover:bg-accent hover:border-primary hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-200 group"
                   >
                     <div
-                      className={`w-full rounded-lg overflow-hidden mb-3 border border-border bg-muted ${
+                      className={`w-full rounded-md overflow-hidden mb-2 border border-border bg-muted ${
                         category === "music" ? "aspect-square" : "aspect-[2/3]"
                       }`}
                     >
@@ -183,20 +183,20 @@ export default function CreateEntryForm({ category }: Props) {
                       ) : null}
                     </div>
 
-                    <div className="font-semibold line-clamp-2 text-sm sm:text-base text-foreground mb-2">
+                    <div className="font-semibold line-clamp-2 text-xs sm:text-sm text-foreground mb-1">
                       {item.title}
                     </div>
                     {item.creators?.length ? (
-                      <div className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-1">
+                      <div className="text-[10px] sm:text-xs text-muted-foreground line-clamp-1">
                         {item.creators.join(", ")}
                       </div>
                     ) : null}
 
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="text-[10px] sm:text-[11px] text-foreground/70 bg-accent px-2 py-1 rounded-full">
+                    <div className="flex items-center justify-between mt-1">
+                      <div className="text-[8px] sm:text-[10px] text-foreground/70 bg-accent px-1.5 py-0.5 rounded-full">
                         {item.provider}
                       </div>
-                      <Plus className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <Plus className="w-3 h-3 sm:w-4 sm:h-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                   </button>
                 ))}

@@ -96,7 +96,7 @@ function SortableCard({
       {...(disabled ? {} : attributes)}
       {...(disabled || isMobile ? {} : listeners)}
       aria-disabled={disabled}
-      className={`group border-2 rounded-xl md:p-2 p-1 pl-0 bg-card shadow-md hover:shadow-lg flex items-center justify-between gap-2 sm:gap-3 lg:gap-4 ${
+      className={`group border-2 border-foreground/50 rounded-xl md:p-2 p-1 pl-0 bg-card shadow-md hover:shadow-lg flex items-center justify-between gap-2 sm:gap-3 lg:gap-4 ${
         disabled
           ? "opacity-60 cursor-default"
           : isMobile
@@ -159,7 +159,7 @@ function SortableCard({
             <button
               type="button"
               onClick={() => onEdit(entry)}
-              className="p-2 rounded-lg bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors duration-200 shadow-sm"
+              className="p-2 rounded-lg bg-foreground/20 hover:bg-foreground/10 text-foreground transition-colors duration-200 "
               title="편집"
             >
               <Edit className="w-4 h-4" />
