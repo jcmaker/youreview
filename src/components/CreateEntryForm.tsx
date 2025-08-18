@@ -15,6 +15,7 @@ import {
   Film,
   Music,
   BookOpen,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -31,6 +32,8 @@ export default function CreateEntryForm({ category }: Props) {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<string>("");
+  const [entryCount, setEntryCount] = useState<number>(0);
+  const [isLoadingCount, setIsLoadingCount] = useState(true);
 
   // 검색 훅
   const { data: searchResults, isLoading: isSearching } = useSearch({
@@ -40,6 +43,41 @@ export default function CreateEntryForm({ category }: Props) {
     debounceMs: 300,
     enabled: titleQuery.length > 0,
   });
+
+  // 카테고리별 아이템 개수 가져오기
+  const fetchEntryCount = async () => {
+    try {
+      setIsLoadingCount(true);
+      const currentYear = new Date().getFullYear();
+      console.log(
+        `Fetching entry count for year: ${currentYear}, category: ${category}`
+      );
+
+      const response = await fetch(
+        `/api/top10/count?year=${currentYear}&category=${category}`
+      );
+
+      console.log(`API response status: ${response.status}`);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(`API response data:`, data);
+        setEntryCount(data.count);
+      } else {
+        const errorText = await response.text();
+        console.error(`API error: ${response.status} - ${errorText}`);
+      }
+    } catch (error) {
+      console.error("Failed to fetch entry count:", error);
+    } finally {
+      setIsLoadingCount(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEntryCount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
 
   useEffect(() => {
     setShowSearchResults(titleQuery.length > 0 && !picked);
@@ -85,6 +123,8 @@ export default function CreateEntryForm({ category }: Props) {
         setTitleQuery("");
         setUserNote("");
         setShowSearchResults(false);
+        // 저장 후 카운트 다시 가져오기
+        fetchEntryCount();
       } catch (err) {
         const msg = err instanceof Error ? err.message : "unknown";
         setMessage(`저장 실패: ${msg}`);
@@ -95,8 +135,55 @@ export default function CreateEntryForm({ category }: Props) {
   const CategoryIcon =
     category === "movie" ? Film : category === "music" ? Music : BookOpen;
 
+  const isMaxReached = entryCount >= 10;
+  const isDisabled = isMaxReached || isLoadingCount;
+
   return (
     <div className="space-y-6">
+      {/* 카테고리별 아이템 개수 표시 */}
+      <div className="flex items-center justify-between p-3 bg-card rounded-lg border border-foreground">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-[rgb(21,128,61)] flex items-center justify-center text-background text-sm shadow-md">
+            <CategoryIcon className="w-4 h-4" />
+          </div>
+          <span className="text-sm font-medium text-foreground">
+            {category === "movie"
+              ? "영화"
+              : category === "music"
+              ? "음악"
+              : "책"}{" "}
+            등록 현황
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          {isLoadingCount ? (
+            <Skeleton className="h-4 w-8" />
+          ) : (
+            <>
+              <span className="text-sm text-muted-foreground">
+                {entryCount}/10
+              </span>
+              {isMaxReached && (
+                <AlertCircle className="w-4 h-4 text-destructive" />
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* 최대 개수 도달 시 경고 메시지 */}
+      {isMaxReached && (
+        <div className="p-3 bg-destructive border border-destructive rounded-lg">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-foreground" />
+            <span className="text-sm font-bold text-foreground">
+              이 카테고리에서 최대 10개까지 등록 가능합니다. 다른 카테고리로
+              이동하거나 기존 항목을 삭제해주세요.
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* 제목 입력란 */}
       <div>
         <label className="block text-sm font-semibold text-foreground mb-3">
@@ -108,9 +195,11 @@ export default function CreateEntryForm({ category }: Props) {
           </div>
           <Input
             type="text"
-            className="w-full border border-foreground rounded-xl pl-10 pr-4 py-3 text-sm sm:text-base focus:outline-black focus:ring-2 focus:ring-ring bg-background text-foreground"
+            className="w-full border border-foreground rounded-xl pl-10 pr-4 py-3 text-sm sm:text-base focus:outline-black focus:ring-2 focus:ring-ring bg-background text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
             placeholder={
-              category === "movie"
+              isDisabled
+                ? "최대 10개까지 등록 가능합니다"
+                : category === "movie"
                 ? "영화 제목을 입력하세요 (예: 라라랜드)"
                 : category === "music"
                 ? "음악 제목을 입력하세요 (예: NewJeans)"
@@ -118,10 +207,11 @@ export default function CreateEntryForm({ category }: Props) {
             }
             value={titleQuery}
             onChange={(e) => setTitleQuery(e.target.value)}
+            disabled={isDisabled}
           />
         </div>
 
-        {picked && (
+        {picked && !isDisabled && (
           <div className="mt-3 p-3 bg-accent rounded-lg border border-primary">
             <div className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-accent-foreground" />
@@ -141,7 +231,7 @@ export default function CreateEntryForm({ category }: Props) {
       </div>
 
       {/* 검색 결과 */}
-      {showSearchResults && (
+      {showSearchResults && !isDisabled && (
         <div className="border border-border rounded-xl p-4 sm:p-6 bg-card">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-[rgb(21,128,61)] flex items-center justify-center text-background text-sm shadow-md">
@@ -221,7 +311,7 @@ export default function CreateEntryForm({ category }: Props) {
       )}
 
       {/* 선택된 항목 프리뷰 */}
-      {picked && (
+      {picked && !isDisabled && (
         <div className="border border-primary rounded-xl p-4 sm:p-6 bg-accent">
           <div className="flex items-start gap-4">
             <div
@@ -276,10 +366,15 @@ export default function CreateEntryForm({ category }: Props) {
             <span className="text-muted-foreground font-normal">(선택)</span>
           </label>
           <Textarea
-            className="w-full border border-foreground rounded-xl px-4 py-3 min-h-[100px] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+            className="w-full border border-foreground rounded-xl px-4 py-3 min-h-[100px] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
             value={userNote}
             onChange={(e) => setUserNote(e.target.value)}
-            placeholder="간단한 감상/메모를 남겨보세요."
+            placeholder={
+              isDisabled
+                ? "최대 10개까지 등록 가능합니다"
+                : "간단한 감상/메모를 남겨보세요."
+            }
+            disabled={isDisabled}
           />
         </div>
 
@@ -312,7 +407,7 @@ export default function CreateEntryForm({ category }: Props) {
 
         <Button
           type="submit"
-          disabled={isPending}
+          disabled={isPending || isDisabled}
           className="w-full sm:w-auto px-6 py-3 rounded-xl bg-foreground text-background disabled:opacity-50 font-bold text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-200 shadow-lg hover:opacity-90 transform hover:-translate-y-0.5 disabled:transform-none"
         >
           <div className="flex items-center justify-center gap-2">

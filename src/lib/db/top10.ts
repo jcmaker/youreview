@@ -181,6 +181,40 @@ export async function deleteEntry(id: string): Promise<void> {
   if (error) throw error;
 }
 
+/**
+ * Get count of entries for a user in a specific year and category.
+ */
+export async function getEntryCountByCategory(
+  userId: string,
+  year: number,
+  category: Category
+): Promise<number> {
+  // Use the same approach as dashboard: get list ID and then get items
+  const { data: listData, error: listError } = await supabaseAdmin
+    .from("top10_lists")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("year", year)
+    .eq("category", category)
+    .maybeSingle();
+
+  if (listError) throw listError;
+
+  // If no list exists, return 0
+  if (!listData?.id) {
+    return 0;
+  }
+
+  // Get all items in this list and return the length
+  const { data: items, error } = await supabaseAdmin
+    .from("top10_items")
+    .select("id")
+    .eq("list_id", listData.id);
+
+  if (error) throw error;
+  return items?.length ?? 0;
+}
+
 export type {
   CreateOrUpdateInput as CreateOrUpdateEntryInput,
   ReorderInput as ReorderEntriesInput,
