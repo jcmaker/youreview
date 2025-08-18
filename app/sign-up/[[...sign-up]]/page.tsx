@@ -10,7 +10,12 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-6">
-      <SignUp routing="path" path="/sign-up" signInUrl="/sign-in" />
+      <SignUp
+        routing="path"
+        path="/sign-up"
+        signInUrl="/sign-in"
+        fallbackRedirectUrl="/onboarding"
+      />
     </div>
   );
 }

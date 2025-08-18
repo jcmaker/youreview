@@ -82,7 +82,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      appearance={{
+        elements: {
+          formButtonPrimary:
+            "bg-foreground text-background hover:bg-foreground/90",
+          card: "bg-card border border-border",
+          headerTitle: "text-foreground",
+          headerSubtitle: "text-muted-foreground",
+          socialButtonsBlockButton:
+            "bg-background border border-border text-foreground hover:bg-accent",
+          formFieldLabel: "text-foreground",
+          formFieldInput: "bg-background border border-border text-foreground",
+          footerActionLink: "text-primary hover:text-primary/80",
+        },
+      }}
+    >
       <html lang="ko" suppressHydrationWarning>
         <body
           suppressHydrationWarning
