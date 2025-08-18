@@ -42,8 +42,8 @@ export default function YearSelector({
         } else {
           // top10 페이지인 경우
           newUrl = category
-            ? `/top10/${year}?category=${category}`
-            : `/top10/${year}`;
+            ? `/dashboard/${year}?category=${category}`
+            : `/dashboard/${year}`;
         }
         router.push(newUrl);
       }

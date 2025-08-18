@@ -23,8 +23,11 @@ export async function setListVisibility(input: {
     .eq("id", listId);
   if (error) throw error;
 
-  revalidatePath(`/top10/${year}`);
-  return { ok: true, year, listId, visibility: input.visible ? "public" : "private" };
+  revalidatePath(`/dashboard/${year}`);
+  return {
+    ok: true,
+    year,
+    listId,
+    visibility: input.visible ? "public" : "private",
+  };
 }
-
-

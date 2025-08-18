@@ -59,6 +59,6 @@ export async function savePickedItem(input: {
     userLink: input.userLink,
   });
 
-  revalidatePath(`/top10/${year}`);
+  revalidatePath(`/dashboard/${year}`);
   return { ok: true, year, listId, itemId: item.id, rank: item.rank };
 }

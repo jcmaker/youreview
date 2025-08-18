@@ -5,10 +5,10 @@ import { useAuth } from "@clerk/nextjs";
 import {
   Sparkles,
   TrendingUp,
-  Award,
   Film,
   Music,
   BookOpen,
+  LayoutDashboard,
 } from "lucide-react";
 
 export default function AuthAwareCTA() {
@@ -19,11 +19,11 @@ export default function AuthAwareCTA() {
       {isSignedIn ? (
         <>
           <Link
-            href="/top10"
+            href="/dashboard"
             className="px-6 py-3 rounded-lg bg-foreground text-background text-center block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
-            <div className="flex items-center justify-center gap-2">
-              <Award className="w-5 h-5" />
+            <div className="flex items-center justify-center gap-2 font-semibold">
+              <LayoutDashboard className="w-5 h-5" />
               Dashboard
             </div>
           </Link>

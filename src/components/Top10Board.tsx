@@ -345,7 +345,7 @@ export default function Top10Board({
       const payload = toPayload(newItems);
       startTransition(async () => {
         try {
-          await fetchJson("/api/top10/reorder", {
+          await fetchJson("/api/dashboard/reorder", {
             method: "POST",
             body: JSON.stringify({ listId, entries: payload }),
             headers: { "Content-Type": "application/json" },

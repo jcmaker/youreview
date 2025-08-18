@@ -251,7 +251,7 @@ export default async function Page({
           </p>
           {isOwnProfile && (
             <div className="mb-6">
-              <Link href="/top10">
+              <Link href="/dashboard">
                 <Button size="lg" className="w-full sm:w-auto">
                   대시보드에서 공개 설정 변경하기
                 </Button>

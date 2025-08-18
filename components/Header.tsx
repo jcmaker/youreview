@@ -15,20 +15,20 @@ import {
   X,
   Plus,
   User,
-  Award,
   Film,
   Music,
   BookOpen,
+  LayoutDashboard,
 } from "lucide-react";
 
 export default function Header() {
   const { isSignedIn } = useAuth();
   const [profilePath, setProfilePath] = useState<string>("/onboarding");
-  const [top10Path, setTop10Path] = useState<string>("/top10");
+  const [top10Path, setTop10Path] = useState<string>("/dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    setTop10Path(`/top10`);
+    setTop10Path(`/dashboard`);
     // best-effort fetch to resolve username for header link
     if (isSignedIn) {
       (async () => {
@@ -65,7 +65,7 @@ export default function Header() {
         <nav className="hidden sm:flex items-center gap-6">
           <SignedIn>
             {[
-              { href: top10Path, label: "Dashboard", icon: Award },
+              { href: top10Path, label: "Dashboard", icon: LayoutDashboard },
               { href: "/create/movie", label: "Add Movie", icon: Plus },
               { href: profilePath, label: "My Page", icon: User },
             ].map((item) => (
@@ -135,7 +135,7 @@ export default function Header() {
           <nav className="px-4 py-3 space-y-1">
             <SignedIn>
               {[
-                { href: top10Path, label: "Dashboard", icon: Award },
+                { href: top10Path, label: "Dashboard", icon: LayoutDashboard },
                 { href: "/create/movie", label: "영화 추가", icon: Film },
                 { href: "/create/music", label: "음악 추가", icon: Music },
                 { href: "/create/book", label: "책 추가", icon: BookOpen },

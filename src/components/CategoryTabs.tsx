@@ -16,8 +16,8 @@ export default function CategoryTabs() {
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get("category") || "movie";
 
-  // /top10/2025 형태에서 연도 추출
-  const yearMatch = pathname.match(/\/top10\/(\d+)/);
+  // /dashboard/2025 형태에서 연도 추출
+  const yearMatch = pathname.match(/\/dashboard\/(\d+)/);
   const currentYear = yearMatch
     ? yearMatch[1]
     : new Date().getFullYear().toString();
@@ -28,8 +28,8 @@ export default function CategoryTabs() {
         const isActive = tab.name === currentCategory;
         const href =
           tab.name === "movie"
-            ? `/top10/${currentYear}`
-            : `/top10/${currentYear}?category=${tab.name}`;
+            ? `/dashboard/${currentYear}`
+            : `/dashboard/${currentYear}?category=${tab.name}`;
 
         return (
           <Link

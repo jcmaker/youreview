@@ -67,7 +67,7 @@ export default async function Page({
         <h1 className="text-2xl font-semibold">{effectiveYear} 연말결산</h1>
         <div className="flex gap-2">
           <Link
-            href={`/top10/${effectiveYear}`}
+            href={`/dashboard/${effectiveYear}`}
             className="px-3 py-2 rounded-md border bg-card hover:bg-accent transition shadow-sm"
           >
             Top10 보드

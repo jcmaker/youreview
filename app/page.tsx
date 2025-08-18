@@ -74,7 +74,7 @@ export default function Home() {
             한 해의 취향을 Top 10으로
           </h2>
           <p className="mt-3 sm:mt-4 text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
-            영화 · 음악 · 책 — 링크로 검색, 드래그로 순서, 연말엔 카드로 공유.
+            영화 · 음악 · 책 — 링크로 검색, 드래그로 순서, 링크로 공유.
           </p>
 
           {/* CTA Buttons */}
@@ -122,12 +122,12 @@ export default function Home() {
               {
                 step: "3",
                 title: "연말결산",
-                desc: "카드 이미지로 뽑아 SNS 공유",
+                desc: "링크를 SNS에 공유하세요",
                 icon: PartyPopper,
               },
             ].map((item, idx) => (
               <div key={idx} className="text-center group">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-primary to-[rgb(21,128,61)] flex items-center justify-center text-background shadow-lg group-hover:shadow-xl transition-all duration-300">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted-foreground flex items-center justify-center text-background shadow-lg group-hover:shadow-xl transition-all duration-300">
                   <item.icon className="w-8 h-8" />
                 </div>
                 <div className="text-sm text-foreground/80 font-semibold mb-2">
@@ -176,7 +176,7 @@ export default function Home() {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border border-border shadow-lg p-6 hover:shadow-xl transition-all duration-300 bg-card group hover:-translate-y-1"
+              className="rounded-2xl border border-muted-foreground shadow-lg p-6 hover:shadow-xl transition-all duration-300 bg-card group hover:-translate-y-1"
             >
               <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-primary to-[rgb(21,128,61)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                 <item.icon className="h-6 w-6 text-background" />
@@ -371,7 +371,7 @@ export default function Home() {
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link
-                    href="/top10"
+                    href="/dashboard"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Dashboard

@@ -36,8 +36,6 @@ export async function updateItem(input: {
     .eq("id", input.itemId);
   if (e3) throw e3;
 
-  revalidatePath(`/top10/${list.year}`);
+  revalidatePath(`/dashboard/${list.year}`);
   return { ok: true };
 }
-
-
