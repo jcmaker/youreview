@@ -25,8 +25,8 @@ begin
   where user_id = p_user_id and year = p_year and category = p_category;
 
   if v_list_id is null then
-    insert into public.top10_lists(user_id, year, category)
-    values (p_user_id, p_year, p_category)
+    insert into public.top10_lists(user_id, year, category, visibility)
+    values (p_user_id, p_year, p_category, 'public')
     returning id into v_list_id;
   end if;
 

@@ -11,6 +11,7 @@ import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ShareLinkButton from "../../../components/ShareLinkButton";
+import { Film, Music, BookOpen } from "lucide-react";
 
 type Item = {
   id: string;
@@ -167,7 +168,7 @@ export default async function Page({
   const shareUrl = `https://youreview.me/u/${profile.username}`;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-4xl mx-auto p-2 md:p-6 space-y-2 space-x-1 md:space-y-6">
       {/* 이미지 프리로더 */}
       <ImagePreloader
         images={
@@ -270,12 +271,23 @@ export default async function Page({
         </div>
       ) : selectedItems.length > 0 ? (
         <div className="space-y-4">
-          <div className="text-lg font-medium text-foreground">
-            {effectiveCategory === "movie"
-              ? "🎬 영화"
-              : effectiveCategory === "music"
-              ? "🎵 음악"
-              : "📚 책"}
+          <div className="text-lg font-medium text-foreground flex items-center gap-2">
+            {effectiveCategory === "movie" ? (
+              <>
+                <Film className="w-5 h-5" />
+                Movie
+              </>
+            ) : effectiveCategory === "music" ? (
+              <>
+                <Music className="w-5 h-5" />
+                Music
+              </>
+            ) : (
+              <>
+                <BookOpen className="w-5 h-5" />
+                Book
+              </>
+            )}
           </div>
 
           {/* Grid View - Horizontal scrolling cards with images */}
@@ -389,19 +401,19 @@ export async function generateMetadata({
   const displayName = profile.display_name || profile.username;
 
   return {
-    title: `${displayName}의 Top 10 - youreview`,
-    description: `${displayName}의 영화, 음악, 책 Top 10 리스트를 확인하세요.`,
+    title: `${displayName}'s Top 10`,
+    description: `${displayName}'s Top 10`,
     keywords: [displayName, "Top 10", "영화", "음악", "책", "리스트", "프로필"],
     openGraph: {
-      title: `${displayName}의 Top 10 - youreview`,
-      description: `${displayName}의 영화, 음악, 책 Top 10 리스트를 확인하세요.`,
+      title: `${displayName}'s Top 10`,
+      description: `${displayName}'s Top 10`,
       type: "profile",
       locale: "ko_KR",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${displayName}의 Top 10 - youreview`,
-      description: `${displayName}의 영화, 음악, 책 Top 10 리스트를 확인하세요.`,
+      title: `${displayName}'s Top 10`,
+      description: `${displayName}'s Top 10`,
     },
   };
 }

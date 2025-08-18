@@ -23,20 +23,19 @@ export default function ShareLinkButton({ url }: ShareLinkButtonProps) {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="sm"
       onClick={copyToClipboard}
-      className="shrink-0"
+      className="shrink-0 text-muted-foreground/60 hover:text-foreground"
     >
       {copied ? (
         <>
-          <Check className="h-4 w-4 mr-1" />
+          <Check className="h-4 w-4 mx-1" />
           복사됨
         </>
       ) : (
         <>
-          <Copy className="h-4 w-4 mr-1" />
-          복사
+          <Copy className="h-4 w-4 mx-1" />
         </>
       )}
     </Button>
