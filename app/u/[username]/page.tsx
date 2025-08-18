@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase/serverAdmin";
 import type { Metadata } from "next";
 import UserProfileCategoryTabs from "@/components/UserProfileCategoryTabs";
@@ -115,7 +114,41 @@ export default async function Page({
 
   // 캐시된 프로필 데이터 가져오기
   const profile = await getCachedProfile(uname);
-  if (!profile) return notFound();
+  if (!profile) {
+    return (
+      <div className="max-w-4xl mx-auto p-2 md:p-6">
+        <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-accent flex items-center justify-center mb-4">
+            <svg
+              className="w-8 h-8 sm:w-10 sm:h-10 text-accent-foreground"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+              />
+            </svg>
+          </div>
+          <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
+            없는 유저입니다
+          </h3>
+          <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-md">
+            요청하신 사용자 &quot;{uname}&quot;을 찾을 수 없습니다.
+          </p>
+          <Link href="/">
+            <Button size="lg" className="w-full sm:w-auto">
+              메인 페이지로 돌아가기
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   // 자신의 프로필인지 확인
   const isOwnProfile = currentUserId === profile.id;
