@@ -335,7 +335,7 @@ export default function Home() {
                   Contact:
                 </div>
                 <Link
-                  href="https://www.instagram.com/justinsta_627"
+                  href="https://www.instagram.com/youreview.me"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors"
@@ -344,7 +344,7 @@ export default function Home() {
                   <Instagram className="w-5 h-5" />
                 </Link>
                 <Link
-                  href="mailto:jcmaker0627@gmail.com"
+                  href="mailto:youreview.me@gmail.com"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="Email"
                 >
