@@ -4,147 +4,109 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Light = 예시코드의 기본: bg-green-600 + text-black */
-  --background: rgb(22, 163, 74); /* green-600 */
-  --foreground: rgb(0, 0, 0); /* black */
-
-  /* 카드/팝오버: 한 톤 어둡게로 섹션 변주 */
-  --card: rgb(21, 128, 61); /* green-700 */
-  --card-foreground: rgb(0, 0, 0); /* black */
-  --popover: rgb(21, 128, 61); /* green-700 */
-  --popover-foreground: rgb(0, 0, 0); /* black */
-
-  /* Primary는 '채워진 버튼' 배경색으로 사용하는 경우가 많음.
-     예시코드(Light)의 primary 버튼: bg-black text-green-600 */
-  --primary: rgb(0, 0, 0); /* black */
-  --primary-foreground: rgb(22, 163, 74); /* green-600 */
-
-  /* Secondary/Muted: 그린 톤의 약한 배경(흰색/회색 제거) */
-  --secondary: rgb(34, 197, 94); /* green-500 */
-  --secondary-foreground: rgb(0, 0, 0); /* black */
-  --muted: rgb(187, 247, 208); /* green-200 */
-  --muted-foreground: rgb(0, 0, 0); /* black */
-
-  /* 액센트(하이라이트): 매우 연한 그린 배경 + 블랙 텍스트 */
-  --accent: rgb(220, 252, 231); /* green-100 */
-  --accent-foreground: rgb(0, 0, 0); /* black */
-
-  --destructive: rgb(239, 68, 68);
-  --destructive-foreground: rgb(255, 255, 255);
-
-  /* 경계/인풋은 검정. 컴포넌트에서 opacity로 미세조정(예: /20) */
-  --border: rgb(0, 0, 0); /* black */
-  --input: rgb(0, 0, 0); /* black */
-
-  /* 포커스 링은 브랜드 그린 */
-  --ring: rgb(22, 163, 74); /* green-600 */
-
-  /* 차트: 그린 단일 계열 */
-  --chart-1: rgb(22, 163, 74); /* g600 */
-  --chart-2: rgb(21, 128, 61); /* g700 */
-  --chart-3: rgb(34, 197, 94); /* g500 */
-  --chart-4: rgb(5, 150, 105); /* emerald-600 (근접 녹색) */
-  --chart-5: rgb(187, 247, 208); /* g200 */
-
-  /* 사이드바도 동일 철학 */
-  --sidebar: rgb(21, 128, 61); /* green-700 */
-  --sidebar-foreground: rgb(0, 0, 0); /* black */
-  --sidebar-primary: rgb(0, 0, 0); /* black (버튼) */
-  --sidebar-primary-foreground: rgb(22, 163, 74); /* green-600 */
-  --sidebar-accent: rgb(34, 197, 94); /* green-500 */
-  --sidebar-accent-foreground: rgb(0, 0, 0);
-  --sidebar-border: rgb(0, 0, 0); /* black */
-  --sidebar-ring: rgb(22, 163, 74);
-
-  /* 폰트/라우디우스/그림자 등은 기존 유지 가능 */
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(0 0% 3.9216%);
+  --card: hsl(0 0% 96.0784%);
+  --card-foreground: hsl(0 0% 3.9216%);
+  --popover: hsl(0 0% 96.0784%);
+  --popover-foreground: hsl(0 0% 3.9216%);
+  --primary: hsl(0 0% 3.9216%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(0 0% 89.8039%);
+  --secondary-foreground: hsl(0 0% 3.9216%);
+  --muted: hsl(0 0% 96.0784%);
+  --muted-foreground: hsl(0 0% 45.098%);
+  --accent: hsl(0 0% 89.8039%);
+  --accent-foreground: hsl(0 0% 3.9216%);
+  --destructive: hsl(0 0% 3.9216%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 80%);
+  --input: hsl(0 0% 80%);
+  --ring: hsl(0 0% 25.098%);
+  --chart-1: hsl(0 0% 3.9216%);
+  --chart-2: hsl(0 0% 25.098%);
+  --chart-3: hsl(0 0% 40%);
+  --chart-4: hsl(0 0% 54.902%);
+  --chart-5: hsl(0 0% 70.1961%);
+  --sidebar: hsl(0 0% 96.0784%);
+  --sidebar-foreground: hsl(0 0% 3.9216%);
+  --sidebar-primary: hsl(0 0% 3.9216%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(0 0% 89.8039%);
+  --sidebar-accent-foreground: hsl(0 0% 3.9216%);
+  --sidebar-border: hsl(0 0% 80%);
+  --sidebar-ring: hsl(0 0% 25.098%);
   --font-sans: Poppins, sans-serif;
   --font-serif: Lora, serif;
   --font-mono: Fira Code, monospace;
   --radius: 0.4rem;
-
-  /* Light 모드: 검정 그림자 */
-  --shadow-2xs: 3px 3px 0px 0px hsl(0 0% 0% / 0.2);
-  --shadow-xs: 3px 3px 0px 0px hsl(0 0% 0% / 0.2);
-  --shadow-sm: 3px 3px 0px 0px hsl(0 0% 0% / 0.4),
-    3px 1px 2px -1px hsl(0 0% 0% / 0.4);
-  --shadow: 3px 3px 0px 0px hsl(0 0% 0% / 0.4),
-    3px 1px 2px -1px hsl(0 0% 0% / 0.4);
-  --shadow-md: 3px 3px 0px 0px hsl(0 0% 0% / 0.4),
-    3px 2px 4px -1px hsl(0 0% 0% / 0.4);
-  --shadow-lg: 3px 3px 0px 0px hsl(0 0% 0% / 0.4),
-    3px 4px 6px -1px hsl(0 0% 0% / 0.4);
-  --shadow-xl: 3px 3px 0px 0px hsl(0 0% 0% / 0.4),
-    3px 8px 10px -1px hsl(0 0% 0% / 0.4);
-  --shadow-2xl: 3px 3px 0px 0px hsl(0 0% 0% / 1);
-
+  --shadow-2xs: 3px 3px 0px 0px hsl(0 0% 0% / 0.25);
+  --shadow-xs: 3px 3px 0px 0px hsl(0 0% 0% / 0.25);
+  --shadow-sm: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 1px 2px -1px hsl(0 0% 0% / 0.5);
+  --shadow: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 1px 2px -1px hsl(0 0% 0% / 0.5);
+  --shadow-md: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 2px 4px -1px hsl(0 0% 0% / 0.5);
+  --shadow-lg: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 4px 6px -1px hsl(0 0% 0% / 0.5);
+  --shadow-xl: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 8px 10px -1px hsl(0 0% 0% / 0.5);
+  --shadow-2xl: 3px 3px 0px 0px hsl(0 0% 0% / 1.25);
   --tracking-normal: 0rem;
   --spacing: 0.25rem;
 }
 
 .dark {
-  /* Dark = 예시코드의 토글: bg-black + text-green-400/300 */
-  --background: rgb(17, 24, 39); /* gray-900 */
-  --foreground: rgb(134, 239, 172);
-
-  --card: rgb(31, 41, 55); /* gray-800 */
-  --card-foreground: rgb(134, 239, 172);
-  --popover: rgb(31, 41, 55); /* gray-800 */
-  --popover-foreground: rgb(134, 239, 172);
-
-  /* 다크에서 primary 버튼: green 배경 + black 텍스트 */
-  --primary: rgb(22, 163, 74); /* green-600 */
-  --primary-foreground: rgb(0, 0, 0); /* black */
-
-  /* 보조/뮤티드도 녹색/검정 스케일 */
-  --secondary: rgb(21, 128, 61); /* green-700 */
-  --secondary-foreground: rgb(134, 239, 172); /* green-300 */
-  --muted: rgb(12, 83, 45); /* deep green */
-  --muted-foreground: rgb(134, 239, 172); /* green-300 */
-
-  /* 액센트: 진한 그린 배경 + 밝은 그린 텍스트 */
-  --accent: rgb(5, 150, 105); /* emerald-600 근접 */
-  --accent-foreground: rgb(187, 247, 208); /* green-200 */
-
-  --destructive: rgb(229, 72, 77);
-  --destructive-foreground: rgb(255, 255, 255);
-
-  /* 경계/인풋: 블랙(컴포넌트 쪽에서 /20 등으로 연출) */
-  --border: rgb(0, 0, 0); /* black */
-  --input: rgb(0, 0, 0); /* black */
-
-  --ring: rgb(22, 163, 74); /* green-600 */
-
-  /* 차트: 다크도 그린 단일 계열 */
-  --chart-1: rgb(22, 163, 74);
-  --chart-2: rgb(21, 128, 61);
-  --chart-3: rgb(34, 197, 94);
-  --chart-4: rgb(5, 150, 105);
-  --chart-5: rgb(187, 247, 208);
-
-  /* 사이드바 */
-  --sidebar: rgb(0, 0, 0);
-  --sidebar-foreground: rgb(134, 239, 172); /* green-300 */
-  --sidebar-primary: rgb(22, 163, 74);
-  --sidebar-primary-foreground: rgb(0, 0, 0);
-  --sidebar-accent: rgb(5, 150, 105);
-  --sidebar-accent-foreground: rgb(187, 247, 208);
-  --sidebar-border: rgb(0, 0, 0);
-  --sidebar-ring: rgb(22, 163, 74);
-
-  /* Dark 모드: 초록 그림자 */
-  --shadow-2xs: 3px 3px 0px 0px hsl(142 72% 42% / 0.2);
-  --shadow-xs: 3px 3px 0px 0px hsl(142 72% 42% / 0.2);
-  --shadow-sm: 3px 3px 0px 0px hsl(142 72% 42% / 0.4),
-    3px 1px 2px -1px hsl(142 72% 42% / 0.4);
-  --shadow: 3px 3px 0px 0px hsl(142 72% 42% / 0.4),
-    3px 1px 2px -1px hsl(142 72% 42% / 0.4);
-  --shadow-md: 3px 3px 0px 0px hsl(142 72% 42% / 0.4),
-    3px 2px 4px -1px hsl(142 72% 42% / 0.4);
-  --shadow-lg: 3px 3px 0px 0px hsl(142 72% 42% / 0.4),
-    3px 4px 6px -1px hsl(142 72% 42% / 0.4);
-  --shadow-xl: 3px 3px 0px 0px hsl(142 72% 42% / 0.4),
-    3px 8px 10px -1px hsl(142 72% 42% / 0.4);
-  --shadow-2xl: 3px 3px 0px 0px hsl(142 72% 42% / 1);
+  --background: hsl(0 0% 3.9216%);
+  --foreground: hsl(0 0% 100%);
+  --card: hsl(0 0% 10.1961%);
+  --card-foreground: hsl(0 0% 100%);
+  --popover: hsl(0 0% 10.1961%);
+  --popover-foreground: hsl(0 0% 100%);
+  --primary: hsl(0 0% 100%);
+  --primary-foreground: hsl(0 0% 3.9216%);
+  --secondary: hsl(0 0% 20%);
+  --secondary-foreground: hsl(0 0% 100%);
+  --muted: hsl(0 0% 14.902%);
+  --muted-foreground: hsl(0 0% 63.9216%);
+  --accent: hsl(0 0% 30.1961%);
+  --accent-foreground: hsl(0 0% 100%);
+  --destructive: hsl(0 0% 100%);
+  --destructive-foreground: hsl(0 0% 3.9216%);
+  --border: hsl(0 0% 20%);
+  --input: hsl(0 0% 20%);
+  --ring: hsl(0 0% 89.8039%);
+  --chart-1: hsl(0 0% 96.0784%);
+  --chart-2: hsl(0 0% 80%);
+  --chart-3: hsl(0 0% 63.9216%);
+  --chart-4: hsl(0 0% 47.8431%);
+  --chart-5: hsl(0 0% 32.1569%);
+  --sidebar: hsl(0 0% 3.9216%);
+  --sidebar-foreground: hsl(0 0% 100%);
+  --sidebar-primary: hsl(0 0% 100%);
+  --sidebar-primary-foreground: hsl(0 0% 3.9216%);
+  --sidebar-accent: hsl(0 0% 30.1961%);
+  --sidebar-accent-foreground: hsl(0 0% 100%);
+  --sidebar-border: hsl(0 0% 20%);
+  --sidebar-ring: hsl(0 0% 89.8039%);
+  --font-sans: Poppins, sans-serif;
+  --font-serif: Lora, serif;
+  --font-mono: Fira Code, monospace;
+  --radius: 0.4rem;
+  --shadow-2xs: 3px 3px 0px 0px hsl(0 0% 0% / 0.25);
+  --shadow-xs: 3px 3px 0px 0px hsl(0 0% 0% / 0.25);
+  --shadow-sm: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 1px 2px -1px hsl(0 0% 0% / 0.5);
+  --shadow: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 1px 2px -1px hsl(0 0% 0% / 0.5);
+  --shadow-md: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 2px 4px -1px hsl(0 0% 0% / 0.5);
+  --shadow-lg: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 4px 6px -1px hsl(0 0% 0% / 0.5);
+  --shadow-xl: 3px 3px 0px 0px hsl(0 0% 0% / 0.5),
+    3px 8px 10px -1px hsl(0 0% 0% / 0.5);
+  --shadow-2xl: 3px 3px 0px 0px hsl(0 0% 0% / 1.25);
 }
 
 @theme inline {
@@ -205,6 +167,10 @@
   --tracking-wide: calc(var(--tracking-normal) + 0.025em);
   --tracking-wider: calc(var(--tracking-normal) + 0.05em);
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+}
+
+body {
+  letter-spacing: var(--tracking-normal);
 }
 
 body {

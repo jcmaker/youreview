@@ -178,7 +178,7 @@ export default function Home() {
               key={idx}
               className="rounded-2xl border border-muted-foreground shadow-lg p-6 hover:shadow-xl transition-all duration-300 bg-card group hover:-translate-y-1"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-primary to-[rgb(21,128,61)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-primary to-primary-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                 <item.icon className="h-6 w-6 text-background" />
               </div>
               <div className="font-bold text-lg text-foreground mb-3">
@@ -209,7 +209,7 @@ export default function Home() {
               className="rounded-2xl border border-border shadow-lg p-6 hover:shadow-xl transition-all duration-300 bg-card"
             >
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-[rgb(21,128,61)] flex items-center justify-center text-background shadow-md">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-primary-400 flex items-center justify-center text-background shadow-md">
                   <user.avatar className="w-6 h-6" />
                 </div>
                 <div>
@@ -235,7 +235,7 @@ export default function Home() {
 
       {/* Re-engage CTA */}
       <section className="max-w-6xl mx-auto px-4 py-12 sm:py-16">
-        <div className="rounded-3xl border border-border shadow-xl p-6 sm:p-8 bg-gradient-to-r from-primary/10 to-[rgb(21,128,61,0.12)] hover:shadow-2xl transition-all duration-300">
+        <div className="rounded-3xl border border-border shadow-xl p-6 sm:p-8 bg-gradient-to-r from-primary/10 to-primary-400/12 hover:shadow-2xl transition-all duration-300">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="text-center sm:text-left">
               <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2">

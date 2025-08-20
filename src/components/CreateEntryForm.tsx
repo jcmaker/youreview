@@ -143,7 +143,7 @@ export default function CreateEntryForm({ category }: Props) {
       {/* 카테고리별 아이템 개수 표시 */}
       <div className="flex items-center justify-between p-3 bg-card rounded-lg border border-foreground">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-[rgb(21,128,61)] flex items-center justify-center text-background text-sm shadow-md">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-primary-400 flex items-center justify-center text-background text-sm shadow-md">
             <CategoryIcon className="w-4 h-4" />
           </div>
           <span className="text-sm font-medium text-foreground">
@@ -234,7 +234,7 @@ export default function CreateEntryForm({ category }: Props) {
       {showSearchResults && !isDisabled && (
         <div className="border border-border rounded-xl p-4 sm:p-6 bg-card">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-[rgb(21,128,61)] flex items-center justify-center text-background text-sm shadow-md">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-primary-400 flex items-center justify-center text-background text-sm shadow-md">
               <CategoryIcon className="w-4 h-4" />
             </div>
             <div className="text-sm sm:text-base text-foreground font-medium">
