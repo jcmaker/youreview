@@ -10,7 +10,8 @@ import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ShareLinkButton from "../../../components/ShareLinkButton";
-import { Film, Music, BookOpen } from "lucide-react";
+import { Film, Music, BookOpen, Home } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 type Item = {
   id: string;
@@ -117,6 +118,9 @@ export default async function Page({
   if (!profile) {
     return (
       <div className="max-w-4xl mx-auto p-2 pt-3 md:p-6">
+        <div className="flex items-center justify-end">
+          <ThemeToggle />
+        </div>
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-accent flex items-center justify-center mb-4">
             <svg
@@ -202,6 +206,19 @@ export default async function Page({
 
   return (
     <div className="max-w-4xl mx-auto p-2 pt-3 md:p-6 space-y-2 space-x-1 md:space-y-6">
+      {/* 홈버튼과 다크모드/라이트모드 버튼 */}
+      <div className="flex items-center justify-between">
+        {currentUserId && (
+          <Link href="/">
+            <Button variant="outline">
+              <Home className="w-4 h-4" />
+            </Button>
+          </Link>
+        )}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+        </div>
+      </div>
       {/* 이미지 프리로더 */}
       <ImagePreloader
         images={
