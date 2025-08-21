@@ -209,13 +209,16 @@ export default async function Page({
       {/* 홈버튼과 다크모드/라이트모드 버튼 */}
       <div className="flex items-center justify-between">
         {currentUserId && (
-          <Link href="/">
-            <Button variant="outline">
-              <Home className="w-4 h-4" />
-            </Button>
-          </Link>
+          <>
+            <Link href="/">
+              <Button variant="outline">
+                <Home className="w-4 h-4" />
+              </Button>
+            </Link>
+            <ThemeToggle />
+          </>
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-end">
           <ThemeToggle />
         </div>
       </div>
