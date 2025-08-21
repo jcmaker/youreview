@@ -116,7 +116,7 @@ export default async function Page({
   const profile = await getCachedProfile(uname);
   if (!profile) {
     return (
-      <div className="max-w-4xl mx-auto p-2 md:p-6">
+      <div className="max-w-4xl mx-auto p-2 pt-3 md:p-6">
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-accent flex items-center justify-center mb-4">
             <svg
@@ -201,7 +201,7 @@ export default async function Page({
   const shareUrl = `https://youreview.me/u/${profile.username}`;
 
   return (
-    <div className="max-w-4xl mx-auto p-2 md:p-6 space-y-2 space-x-1 md:space-y-6">
+    <div className="max-w-4xl mx-auto p-2 pt-3 md:p-6 space-y-2 space-x-1 md:space-y-6">
       {/* 이미지 프리로더 */}
       <ImagePreloader
         images={

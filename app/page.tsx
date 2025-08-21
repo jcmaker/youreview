@@ -7,13 +7,13 @@ import {
   Heart,
   Share2,
   Clock,
-  Star,
+  // Star,
   Search,
   BarChart3,
   PartyPopper,
-  User,
-  Palette,
-  Mic,
+  // User,
+  // Palette,
+  // Mic,
   Instagram,
 } from "lucide-react";
 
@@ -74,7 +74,8 @@ export default function Home() {
             한 해의 취향을 Top 10으로
           </h2>
           <p className="mt-3 sm:mt-4 text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
-            영화 · 음악 · 책 — 링크로 검색, 드래그로 순서, 링크로 공유.
+            올해 즐겼던 영화, 음악, 책을 정리하고 순위를 매겨 친구들과
+            공유해보세요. 드래그 앤 드롭으로 쉽게 랭킹을 만들 수 있어요.
           </p>
 
           {/* CTA Buttons */}
@@ -193,7 +194,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="max-w-6xl mx-auto px-4 py-12 sm:py-16">
+      {/* <section className="max-w-6xl mx-auto px-4 py-12 sm:py-16">
         <h2 className="text-xl sm:text-2xl font-bold text-center text-foreground mb-8 sm:mb-12">
           사용자 이야기
         </h2>
@@ -231,7 +232,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Re-engage CTA */}
       <section className="max-w-6xl mx-auto px-4 py-12 sm:py-16">
@@ -239,10 +240,10 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="text-center sm:text-left">
               <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
-                올해 나만의 Top 10을 시작하세요
+                올해 추억을 정리해보세요
               </h3>
               <p className="text-sm sm:text-base text-muted-foreground">
-                지금 바로 첫 작품을 추가해보세요.
+                연말이 되기 전에 미리 정리하거나, 지금까지의 베스트를 뽑아보세요
               </p>
             </div>
 
