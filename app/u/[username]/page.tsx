@@ -208,20 +208,14 @@ export default async function Page({
     <div className="max-w-4xl mx-auto p-2 pt-3 md:p-6 space-y-2 space-x-1 md:space-y-6">
       {/* 홈버튼과 다크모드/라이트모드 버튼 */}
       <div className="flex items-center justify-between">
-        {currentUserId && (
-          <>
-            <Link href="/">
-              <Button variant="outline">
-                <Home className="w-4 h-4" />
-              </Button>
-            </Link>
-            <ThemeToggle />
-          </>
-        )}
-        <div className="flex items-center gap-2 justify-end">
-          <ThemeToggle />
-        </div>
+        <Link href="/">
+          <Button variant="ghost" size="icon">
+            <Home className="w-4 h-4" />
+          </Button>
+        </Link>
+        <ThemeToggle />
       </div>
+
       {/* 이미지 프리로더 */}
       <ImagePreloader
         images={
