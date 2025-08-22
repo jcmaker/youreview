@@ -48,7 +48,7 @@ export default async function ProfilePage() {
     (a, b) => b - a
   );
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/u/${profile.username}`;
+  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/u/${profile.username}`;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
