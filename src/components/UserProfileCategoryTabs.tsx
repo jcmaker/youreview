@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Film, Music, BookOpen, Lock } from "lucide-react";
+import { Film, Music, BookOpen } from "lucide-react";
 import { useMemo, useCallback } from "react";
 
 const tabs = [
@@ -55,10 +55,8 @@ export default function UserProfileCategoryTabs({
   }, [currentCategory, isOwnProfile, availableCategories, username]);
 
   const handleClick = useCallback(
-    (e: React.MouseEvent, isAvailable: boolean) => {
-      if (!isAvailable) {
-        e.preventDefault();
-      }
+    (e: React.MouseEvent, isAvailable: boolean, isPrivate: boolean) => {
+      // 모든 카테고리를 자유롭게 클릭할 수 있음
     },
     []
   );
@@ -81,12 +79,9 @@ export default function UserProfileCategoryTabs({
               ? "text-muted-foreground/60 border border-transparent hover:bg-accent/50"
               : "text-foreground/80 border border-transparent hover:bg-accent"
           )}
-          onClick={(e) => handleClick(e, true)} // 본인 프로필에서는 항상 클릭 가능
+          onClick={(e) => handleClick(e, tab.isAvailable, tab.isPrivate)}
         >
           <tab.icon className="w-4 h-4" />
-          {tab.isPrivate && (
-            <Lock className="w-3 h-3 absolute -top-1 -right-1 text-muted-foreground" />
-          )}
           <span className="sr-only">{tab.label}</span>
         </Link>
       ))}

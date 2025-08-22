@@ -169,31 +169,26 @@ export default async function Page({
   const availableCategories = availableLists.map((l) => l.category);
 
   // 원래 요청된 카테고리가 비공개인지 확인
-  const isRequestedCategoryPrivate = lists?.some(
-    (l) => l.category === category && l.visibility === "private"
-  );
+  // const isRequestedCategoryPrivate = lists?.some(
+  //   (l) => l.category === category && l.visibility === "private"
+  // );
 
-  // 선택된 카테고리에 데이터가 없으면 사용 가능한 첫 번째 카테고리로 변경
-  let effectiveCategory = category;
-  if (
-    !availableCategories.includes(category) &&
-    availableCategories.length > 0
-  ) {
-    effectiveCategory = availableCategories[0] as "movie" | "music" | "book";
-  }
+  // 사용자가 선택한 카테고리를 그대로 유지 (자동 전환하지 않음)
+  const effectiveCategory = category;
 
   // 선택된 카테고리가 비공개인지 확인
   const isCategoryPrivate = lists?.some(
     (l) => l.category === effectiveCategory && l.visibility === "private"
   );
 
-  // 선택된 카테고리의 리스트만 필터링
-  const selectedList = availableLists?.find(
-    (l) => l.category === effectiveCategory
-  );
+  // 선택된 카테고리의 리스트 찾기 (본인이면 모든 리스트, 아니면 public만)
+  const selectedList = lists?.find((l) => l.category === effectiveCategory);
+
+  // 선택된 카테고리에 데이터가 있는지 확인
+  const hasData = selectedList && selectedList.item_count > 0;
 
   let selectedItems: Item[] = [];
-  if (selectedList) {
+  if (selectedList && hasData) {
     // 캐시된 아이템 데이터 가져오기
     selectedItems = await getCachedItems(selectedList.id);
   }
@@ -243,9 +238,9 @@ export default async function Page({
         </div>
       </div>
 
-      {isCategoryPrivate ||
-      isRequestedCategoryPrivate ||
-      (!isOwnProfile && !selectedList) ? (
+      {/* 카테고리별 상태에 따른 렌더링 */}
+      {isCategoryPrivate ? (
+        // 비공개 카테고리
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-accent flex items-center justify-center mb-4">
             <svg
@@ -266,33 +261,26 @@ export default async function Page({
           <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
             {isOwnProfile
               ? "비공개로 설정된 카테고리입니다"
-              : "비공개 카테고리입니다"}
+              : "비공개 페이지입니다"}
           </h3>
           <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-md">
             {isOwnProfile
               ? `현재 ${
-                  (isRequestedCategoryPrivate
-                    ? category
-                    : effectiveCategory) === "movie"
+                  effectiveCategory === "movie"
                     ? "영화"
-                    : (isRequestedCategoryPrivate
-                        ? category
-                        : effectiveCategory) === "music"
+                    : effectiveCategory === "music"
                     ? "음악"
                     : "책"
                 } 카테고리가 비공개로 설정되어 있습니다.`
               : `${profile.display_name || profile.username}님이 ${
-                  (isRequestedCategoryPrivate
-                    ? category
-                    : effectiveCategory) === "movie"
+                  effectiveCategory === "movie"
                     ? "영화"
-                    : (isRequestedCategoryPrivate
-                        ? category
-                        : effectiveCategory) === "music"
+                    : effectiveCategory === "music"
                     ? "음악"
                     : "책"
                 } 카테고리를 비공개로 설정했습니다.`}
-            {availableCategories.length > 0 && " 다른 카테고리를 선택해보세요."}
+            <br />
+            <span className="mt-4">다른 카테고리를 눌러보세요.</span>
           </p>
           {isOwnProfile && (
             <div className="mb-6">
@@ -303,18 +291,52 @@ export default async function Page({
               </Link>
             </div>
           )}
-          {availableCategories.length > 0 && (
-            <div className="text-sm text-muted-foreground">
-              공개된 카테고리:{" "}
-              {availableCategories
-                .map((cat) =>
-                  cat === "movie" ? "영화" : cat === "music" ? "음악" : "책"
-                )
-                .join(", ")}
+        </div>
+      ) : !hasData ? (
+        // 데이터가 없는 카테고리
+        <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-accent flex items-center justify-center mb-4">
+            <svg
+              className="w-8 h-8 sm:w-10 sm:h-10 text-accent-foreground"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
+            {isOwnProfile ? "데이터가 없습니다" : "아직 데이터가 없습니다"}
+          </h3>
+          <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-md">
+            {selectedYear}년{" "}
+            {effectiveCategory === "movie"
+              ? "영화"
+              : effectiveCategory === "music"
+              ? "음악"
+              : "책"}{" "}
+            Top 10이 아직 없습니다.
+            <br />
+            <span className="mt-4">다른 카테고리를 눌러보세요.</span>
+          </p>
+          {isOwnProfile && (
+            <div className="mb-6">
+              <Link href="/create">
+                <Button size="lg" className="w-full sm:w-auto">
+                  콘텐츠 추가하러 가기
+                </Button>
+              </Link>
             </div>
           )}
         </div>
-      ) : selectedItems.length > 0 ? (
+      ) : (
+        // 데이터가 있는 카테고리
         <div className="space-y-4">
           <div className="text-lg font-medium text-foreground flex items-center gap-2">
             {effectiveCategory === "movie" ? (
@@ -345,37 +367,6 @@ export default async function Page({
             </h3>
             <UserProfileListView items={selectedItems} />
           </div>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-accent flex items-center justify-center mb-4">
-            <svg
-              className="w-8 h-8 sm:w-10 sm:h-10 text-accent-foreground"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-          </div>
-          <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
-            아직 데이터가 없습니다
-          </h3>
-          <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-md">
-            {selectedYear}년{" "}
-            {effectiveCategory === "movie"
-              ? "영화"
-              : effectiveCategory === "music"
-              ? "음악"
-              : "책"}{" "}
-            Top 10이 아직 없습니다.
-          </p>
         </div>
       )}
 
