@@ -30,7 +30,7 @@ export function validateUsername(username: string): {
   return { ok: true };
 }
 
-export async function isUsernameAvailable(_username: string): Promise<boolean> {
+export async function isUsernameAvailable(): Promise<boolean> {
   // Client-side availability check is disabled to avoid exposing service role in client bundles.
   // Use server action or API endpoint instead.
   return true;

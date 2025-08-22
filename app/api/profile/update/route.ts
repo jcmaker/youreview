@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { username, display_name } = body;
 
-    const updateData: any = {};
+    const updateData: { username?: string; display_name?: string | null } = {};
 
     if (username !== undefined) {
       // Check if username is already taken by another user
