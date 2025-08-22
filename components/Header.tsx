@@ -36,7 +36,7 @@ export default function Header() {
           const res = await fetch("/api/profile/me", { cache: "no-store" });
           if (!res.ok) return;
           const j = (await res.json()) as { username?: string | null };
-          if (j.username) setProfilePath(`/u/${j.username}`);
+          if (j.username) setProfilePath(`/profile`);
           else setProfilePath("/onboarding");
         } catch {
           setProfilePath("/onboarding");

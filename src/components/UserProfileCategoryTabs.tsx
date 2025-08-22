@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Film, Music, BookOpen } from "lucide-react";
-import { useMemo, useCallback } from "react";
+// import { useMemo, useCallback } from "react";
+import { useMemo } from "react";
 
 const tabs = [
   { name: "movie", label: "영화", icon: Film },
@@ -54,12 +55,12 @@ export default function UserProfileCategoryTabs({
     });
   }, [currentCategory, isOwnProfile, availableCategories, username]);
 
-  const handleClick = useCallback(
-    (e: React.MouseEvent, isAvailable: boolean, isPrivate: boolean) => {
-      // 모든 카테고리를 자유롭게 클릭할 수 있음
-    },
-    []
-  );
+  // const handleClick = useCallback(
+  //   (e: React.MouseEvent, isAvailable: boolean, isPrivate: boolean) => {
+  //     // 모든 카테고리를 자유롭게 클릭할 수 있음
+  //   },
+  //   []
+  // );
 
   return (
     <div className="flex gap-1 p-1 bg-card rounded-xl border border-border shadow-sm">
@@ -79,7 +80,7 @@ export default function UserProfileCategoryTabs({
               ? "text-muted-foreground/60 border border-transparent hover:bg-accent/50"
               : "text-foreground/80 border border-transparent hover:bg-accent"
           )}
-          onClick={(e) => handleClick(e, tab.isAvailable, tab.isPrivate)}
+          // onClick={(e) => handleClick(e, tab.isAvailable, tab.isPrivate)}
         >
           <tab.icon className="w-4 h-4" />
           <span className="sr-only">{tab.label}</span>
