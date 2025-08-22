@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import { ClerkProvider } from "@clerk/nextjs";
-import Header from "@/components/Header";
-import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 import HeaderWrapper from "@/components/HeaderWrapper";
 
 const geistSans = Geist({
@@ -111,7 +110,10 @@ export default function RootLayout({
           </Providers>
         </body>
       </html>
-      <Analytics />
+      <Script
+        src="https://va.vercel-scripts.com/v1/script.js"
+        strategy="afterInteractive"
+      />
     </ClerkProvider>
   );
 }

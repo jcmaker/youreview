@@ -2,6 +2,15 @@
 
 Personal Top 10 for movies, music, and books. Search → pick → rank → share.
 
+## SEO & Performance Features
+
+- **SEO Optimized**: Meta descriptions, Open Graph tags, Twitter cards for all pages
+- **H1 Tags**: Semantic heading structure across all major pages
+- **Sitemap**: Auto-generated XML sitemap with `next-sitemap`
+- **Robots.txt**: Proper search engine crawling directives
+- **Performance**: Optimized JavaScript loading with `next/script`
+- **Accessibility**: Proper ARIA labels and semantic HTML structure
+
 ## Environment
 
 Public (client):

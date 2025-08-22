@@ -32,18 +32,18 @@ export async function generateMetadata({
   const categoryName = categoryNames[typed];
 
   return {
-    title: `${categoryName} 등록 - youreview`,
+    title: `${categoryName} 등록`,
     description: `${categoryName}를 검색하고 나만의 Top 10 리스트에 추가하세요.`,
     keywords: [categoryName, "등록", "추가", "검색", "Top 10"],
     openGraph: {
-      title: `${categoryName} 등록 - youreview`,
+      title: `${categoryName} 등록`,
       description: `${categoryName}를 검색하고 나만의 Top 10 리스트에 추가하세요.`,
       type: "website",
       locale: "ko_KR",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${categoryName} 등록 - youreview`,
+      title: `${categoryName} 등록`,
       description: `${categoryName}를 검색하고 나만의 Top 10 리스트에 추가하세요.`,
     },
   };

@@ -3,7 +3,17 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "로그인 - youreview",
-  description: "youreview에 로그인하여 나만의 Top 10 리스트를 만들어보세요.",
+  description:
+    "youreview에 로그인하여 영화, 음악, 책의 Top 10 리스트를 만들고 관리하세요. 소셜 로그인으로 간편하게 시작할 수 있습니다.",
+  keywords: [
+    "로그인",
+    "youreview",
+    "Top 10",
+    "영화",
+    "음악",
+    "책",
+    "소셜 로그인",
+  ],
   robots: "noindex, nofollow",
 };
 
