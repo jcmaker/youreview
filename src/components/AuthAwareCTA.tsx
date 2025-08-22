@@ -2,29 +2,47 @@
 
 import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 import {
   Sparkles,
   TrendingUp,
   Film,
   Music,
   BookOpen,
-  LayoutDashboard,
+  User,
 } from "lucide-react";
 
 export default function AuthAwareCTA() {
   const { isSignedIn } = useAuth();
+  const [profilePath, setProfilePath] = useState<string>("/onboarding");
+
+  useEffect(() => {
+    if (isSignedIn) {
+      (async () => {
+        try {
+          const res = await fetch("/api/profile/me", { cache: "no-store" });
+          if (!res.ok) return;
+          const j = (await res.json()) as { username?: string | null };
+          if (j.username) setProfilePath(`/u/${j.username}`);
+          else setProfilePath("/onboarding");
+        } catch {
+          setProfilePath("/onboarding");
+        }
+      })();
+    }
+  }, [isSignedIn]);
 
   return (
     <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
       {isSignedIn ? (
         <>
           <Link
-            href="/dashboard"
+            href={profilePath}
             className="px-6 py-3 rounded-lg bg-foreground text-background text-center block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
             <div className="flex items-center justify-center gap-2 font-semibold">
-              <LayoutDashboard className="w-5 h-5" />
-              Dashboard
+              <User className="w-5 h-5" />
+              마이페이지
             </div>
           </Link>
 

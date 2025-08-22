@@ -228,12 +228,10 @@ export default async function Page({
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-foreground">
-          {title}
-          <span className="text-foreground/90 font-semibold">
-            &apos;s Top 10
-          </span>
+          {title?.toUpperCase()}
+          <span className="text-foreground/90 font-medium">&apos;s Top 10</span>
         </h1>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ">
           <YearSelector
             currentYear={selectedYear}
             availableYears={[]} // 연도 선택기는 별도로 처리
