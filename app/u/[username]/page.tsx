@@ -194,7 +194,7 @@ export default async function Page({
   }
 
   // const title = `${profile.display_name || profile.username}'s Top 10`;
-  const title = `${profile.display_name || profile.username}`;
+  const title = `#${profile.display_name || profile.username}`;
 
   // 공유 링크 생성
   const shareUrl = `https://youreview.me/u/${profile.username}`;

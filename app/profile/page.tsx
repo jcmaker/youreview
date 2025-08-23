@@ -89,7 +89,7 @@ export default async function ProfilePage() {
             <div className="space-y-3">
               <div>
                 <label className="text-sm font-medium text-muted-foreground">
-                  사용자명
+                  닉네임
                 </label>
                 <p className="text-lg font-semibold text-foreground">
                   @{profile.username}
@@ -178,7 +178,7 @@ export default async function ProfilePage() {
       <Card>
         <CardHeader>
           <CardTitle>프로필 설정</CardTitle>
-          <CardDescription>사용자명을 변경할 수 있습니다</CardDescription>
+          <CardDescription>닉네임을 변경할 수 있습니다</CardDescription>
         </CardHeader>
         <CardContent>
           <ProfileForm initialUsername={profile.username} />

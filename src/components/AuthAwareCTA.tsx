@@ -38,11 +38,11 @@ export default function AuthAwareCTA() {
         <>
           <Link
             href={profilePath}
-            className="px-6 py-3 rounded-lg bg-foreground text-background text-center block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
           >
-            <div className="flex items-center justify-center gap-2 font-semibold">
+            <div className="flex items-center justify-center gap-2 font-semibold ">
               <User className="w-5 h-5" />
-              마이페이지
+              My Top 10
             </div>
           </Link>
 

@@ -126,14 +126,14 @@ export default function ProfileForm({ initialUsername }: ProfileFormProps) {
               htmlFor="username"
               className="text-sm font-medium text-foreground"
             >
-              사용자명
+              닉네임
             </label>
             <div className="relative mt-1">
               <Input
                 id="username"
                 value={username}
                 onChange={(e) => handleUsernameChange(e.target.value)}
-                placeholder="사용자명을 입력하세요"
+                placeholder="닉네임을 입력하세요"
                 className={`pr-10 ${usernameError ? "border-destructive" : ""}`}
                 disabled={isLoading}
               />
@@ -151,7 +151,7 @@ export default function ProfileForm({ initialUsername }: ProfileFormProps) {
               <p className="text-sm text-destructive mt-1">{usernameError}</p>
             )}
             <p className="text-sm text-muted-foreground mt-1">
-              사용자명은 3-20자의 영문, 숫자, 언더스코어만 사용할 수 있습니다
+              닉네임은 3-20자의 영문, 숫자, 언더스코어만 사용할 수 있습니다
             </p>
           </div>
         </div>

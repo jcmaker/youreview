@@ -9,12 +9,17 @@ import {
   Clock,
   // Star,
   Search,
-  BarChart3,
+  // BarChart3,
   PartyPopper,
   // User,
   // Palette,
   // Mic,
   Instagram,
+  Target,
+  ListOrdered,
+  Film,
+  Music,
+  BookOpen,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -118,7 +123,7 @@ export default function Home() {
                 step: "2",
                 title: "순위 정하기",
                 desc: "Drag & Drop 으로 1~10위 정렬",
-                icon: BarChart3,
+                icon: ListOrdered,
               },
               {
                 step: "3",
@@ -160,7 +165,7 @@ export default function Home() {
               desc: "한 해의 취향 기록을 한곳에 모아두세요.",
             },
             {
-              icon: Clock,
+              icon: Target,
               title: "취향 발견",
               desc: "연말에 보면 나만의 패턴이 보여요.",
             },
@@ -253,19 +258,7 @@ export default function Home() {
                 className="px-4 py-3 rounded-lg bg-foreground text-background text-center text-sm block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 <div className="flex items-center justify-center gap-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 4v16M17 4v16M3 8h4m10 0h4M6 4h12M4 16h16M4 12h16"
-                    />
-                  </svg>
+                  <Film className="w-4 h-4" />
                   영화 추가
                 </div>
               </Link>
@@ -274,19 +267,7 @@ export default function Home() {
                 className="px-4 py-3 rounded-lg bg-foreground text-background text-center text-sm block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 <div className="flex items-center justify-center gap-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
-                    />
-                  </svg>
+                  <Music className="w-4 h-4" />
                   음악 추가
                 </div>
               </Link>
@@ -295,20 +276,7 @@ export default function Home() {
                 className="px-4 py-3 rounded-lg bg-foreground text-background text-center text-sm block transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 <div className="flex items-center justify-center gap-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    />
-                  </svg>
-                  책 추가
+                  <BookOpen className="w-4 h-4" />책 추가
                 </div>
               </Link>
             </div>
