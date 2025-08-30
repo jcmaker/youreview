@@ -77,35 +77,24 @@ export async function insertItemAutoRank(params: {
   userNote?: string | null;
   userLink?: string | null;
 }) {
-  const { data: existing, error: e1 } = await supabaseAdmin
-    .from("top10_items")
-    .select("rank")
-    .eq("list_id", params.listId);
-  if (e1) throw e1;
-  const ranks = new Set((existing ?? []).map((r) => r.rank as number));
-  // Find the first empty rank in 1..10
-  let nextRank = 0;
-  for (let i = 1; i <= 10; i += 1) {
-    if (!ranks.has(i)) {
-      nextRank = i;
-      break;
-    }
-  }
-  if (nextRank === 0) {
-    throw new Error("해당 리스트가 이미 10개로 가득 찼습니다.");
-  }
+  // add_top10_item RPC 함수를 사용하여 더 안전한 랭킹 할당
+  const { data, error } = await supabaseAdmin.rpc("add_top10_item", {
+    p_list_id: params.listId,
+    p_media_id: params.mediaId,
+    p_user_note: params.userNote ?? null,
+    p_user_link: params.userLink ?? null,
+  });
 
-  const { data, error } = await supabaseAdmin
-    .from("top10_items")
-    .insert({
-      list_id: params.listId,
-      media_id: params.mediaId,
-      rank: nextRank,
-      user_note: params.userNote ?? null,
-      user_link: params.userLink ?? null,
-    })
-    .select()
-    .single();
   if (error) throw error;
-  return data;
+
+  // 새로 생성된 항목의 정보를 가져오기
+  const { data: item, error: itemError } = await supabaseAdmin
+    .from("top10_items")
+    .select("*")
+    .eq("id", data)
+    .single();
+
+  if (itemError) throw itemError;
+
+  return item;
 }

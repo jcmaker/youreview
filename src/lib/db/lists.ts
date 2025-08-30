@@ -10,29 +10,11 @@ export async function getOrCreateListId(
     p_year: year,
     p_category: category,
   });
-  if (!error && data) return data as string; // uuid
 
-  // Fallback when RPC is not deployed (PGRST202) or returns no data
-  const { data: existing, error: selErr } = await supabaseAdmin
-    .from("top10_lists")
-    .select("id")
-    .eq("user_id", userId)
-    .eq("year", year)
-    .eq("category", category)
-    .maybeSingle();
-  if (selErr) throw selErr;
-  if (existing?.id) return existing.id as string;
+  if (error) throw error;
+  if (!data) throw new Error("Failed to create or get list");
 
-  const { data: inserted, error: insErr } = await supabaseAdmin
-    .from("top10_lists")
-    .upsert(
-      { user_id: userId, year, category },
-      { onConflict: "user_id,year,category" }
-    )
-    .select("id")
-    .single();
-  if (insErr) throw insErr;
-  return inserted.id as string;
+  return data as string; // uuid
 }
 
 export async function getListId(

@@ -16,11 +16,14 @@ create or replace function public.get_or_create_top10_list(
   p_user_id text, p_year int, p_category text
 ) returns uuid
 language plpgsql
+
 as $$
 declare
+
   v_list_id uuid;
 begin
   select id into v_list_id
+
   from public.top10_lists
   where user_id = p_user_id and year = p_year and category = p_category;
 
